@@ -7,6 +7,6 @@ export const URL = {
 };
 
 export default {
-	activities: activities(instance, `${URL.OUTDOORKA_URL}/posts`),
+	activities: activities(instance, `https://jsonplaceholder.typicode.com/posts`),
 	user: user(instance, `${URL.OUTDOORKA_URL}/api/v1/users`),
 };
