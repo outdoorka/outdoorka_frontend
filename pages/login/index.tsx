@@ -1,16 +1,48 @@
 "use client";
 
 import React from "react";
+import axios from "@/plugins/api/axios";
 import NextLink from 'next/link';
 import { Grid, Box, Typography, FormGroup, FormControlLabel, Checkbox, TextField, Button, Link as MuiLink } from "@mui/material";
 
-function Login() {
+export default function Login() {
+	const { auth } = axios;
+
 	const [account, setAccount] = React.useState("");
-	const [psw, setPsw] = React.useState("");
-	const handleEmailSubmit = (e: { preventDefault: () => void; }) => {
+	const [pwd, setPwd] = React.useState("");
+	const [validAccount, setValidAccount] = React.useState(true);
+	const [validPwd, setValidPwd] = React.useState(true);
+
+	const EMAIL_REGEX = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/ ;
+	const PWD_REGEX = /^[0-9a-zA-Z]{8,24}$/;
+
+	React.useEffect(() => {
+		if(account === "") return
+		setValidAccount(EMAIL_REGEX.test(account));
+	}, [account]);
+	React.useEffect(() => {
+		if(pwd === "") return
+		setValidPwd(PWD_REGEX.test(pwd));
+	}, [pwd]);
+
+	const handleSubmit = (e: { preventDefault: () => void; }) => {
 		e.preventDefault();
-		console.log(psw);
-		console.log(account);
+
+		if (!EMAIL_REGEX.test(account)) {
+			setValidAccount(EMAIL_REGEX.test(account));
+			return;
+		}
+		if (!PWD_REGEX.test(pwd)) {
+			setValidPwd(PWD_REGEX.test(pwd));
+			return;
+		}
+		auth.loginUser({pwd,account})
+		.then((result: any) => {
+			console.log(result);
+		})
+		.catch((err: any) => {
+			console.error(err);
+		});
 	}
 
 	return (
@@ -65,26 +97,30 @@ function Login() {
 								objectFit: 'cover',
 								marginBottom: 3
 							}}
-							alt="logi"
+							alt="login"
 							src="https://i.imgur.com/qokckjQ.png"
 						/>
 						<FormGroup>
 							<TextField 
 								required
 								value={account}
-								onChange={(event) => setAccount(event.target.value)}
 								label="帳號" 
-								variant="outlined"
 								margin="normal"
+								error={!validAccount}
+								helperText={account ? (!validAccount ? "請確認正確Email格式": "") : "請輸入您的Email"}
+								InputLabelProps={{ shrink: true }}
+								onChange={(event) => setAccount(event.target.value)}
 							/>
 							<TextField 
 								required
-								value={psw}
-								onChange={(event) => setPsw(event.target.value)}
+								value={pwd}
 								label="密碼" 
-								variant="outlined" 
 								margin="normal"
 								type="password"
+								error={!validPwd}
+								helperText={!validPwd ? "請確認正確密碼格式，規則為大小寫英數字並且至少八碼" : ""}
+								InputLabelProps={{ shrink: true }}
+								onChange={(event) => setPwd(event.target.value)}
 							/>
 							<Button 
 								variant="contained" 
@@ -93,7 +129,12 @@ function Login() {
 									marginTop: 1, 
 									marginBottom: 1
 								}}
-								onClick={ handleEmailSubmit }
+								onClick={ handleSubmit }
+								disabled={
+									!validAccount || !validPwd
+									? true
+									: false
+								}
 							>
 								登入
 							</Button>
@@ -152,5 +193,3 @@ function Login() {
 		</Grid>
 	);
 }
-
-export default Login;
