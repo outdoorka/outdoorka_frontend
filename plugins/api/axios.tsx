@@ -3,10 +3,10 @@ import activities from "@/api/activity";
 import user from "@/api/user";
 
 export const URL = {
-	outdoorkaDomain: "http://localhost:3006",
+	OUTDOORKA_URL: process.env.FRONTEND_URL || "http://localhost:3006",
 };
 
 export default {
-	activities: activities(instance, `${URL.outdoorkaDomain}/posts`),
-	user: user(instance, `${URL.outdoorkaDomain}/api/v1/users`),
+	activities: activities(instance, `${URL.OUTDOORKA_URL}/posts`),
+	user: user(instance, `${URL.OUTDOORKA_URL}/api/v1/users`),
 };
