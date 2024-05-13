@@ -19,7 +19,10 @@ const onResponse = (response: any) => {
 const onError = (error: any) => {
 	const status = error?.response?.status || "500";
 
-	return { status: `${status} - failure`, error: error.response.data };
+	return {
+		status: `${status} - failure`,
+		error: error?.response?.data || {},
+	};
 };
 
 instance.interceptors.request.use(onRequest);
