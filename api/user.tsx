@@ -1,3 +1,4 @@
+import { RegisterForm } from "@/types/AuthType";
 export default (axios: any, event: any) => ({
 	getUser(id: string) {
 		console.log("event", id);
@@ -12,17 +13,7 @@ export default (axios: any, event: any) => ({
 	updateUserPassword(id: string, post: any) {
 		return axios.patch(`${event}/${id}/password`, post);
 	},
-	registerUser(post: {
-		name:string
-		pwd:string
-		account:string
-		mobile:string
-	}) {
-		return axios.post(`${event}`, {
-			name: post.name,
-			mobile: post.mobile,
-			email: post.account,
-			password: post.pwd
-		})
-	}
+	registerUser(post: RegisterForm) {
+		return axios.post(`${event}`, post);
+	},
 });

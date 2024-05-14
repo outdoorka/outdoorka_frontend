@@ -1,13 +1,9 @@
+import { LoginForm } from "@/types/AuthType";
 export default (axios: any, event: any) => ({
-	loginUser(post: {
-		pwd:string
-		account:string
-	}) {
-		console.log(`${event}/users/login`);
-		console.log(post);
+	loginEndUser(post: LoginForm) {
 		return axios.post(`${event}/login`, {
 			email: post.account,
-			password: post.pwd
-		})
+			password: post.password,
+		});
 	},
 });
