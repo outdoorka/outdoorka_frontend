@@ -9,6 +9,9 @@ import {
 	TextField,
 	Button,
 } from "@mui/material";
+import Facebook from "@/components/layout/icons/facebook";
+import Instagram from "@/components/layout/icons/instagram";
+import Xtwitter from "@/components/layout/icons/Xtwitter";
 
 const items = [
 	{
@@ -22,26 +25,6 @@ const items = [
 	},
 ];
 
-const socialLinks = [
-	{
-		title: "facebook",
-		link: "#",
-		src: "images/facebook.png",
-		alt: "facebook",
-	},
-	{
-		title: "instagram",
-		link: "#",
-		src: "images/instagram.png",
-		alt: "instagram",
-	},
-	{
-		title: "x-twitter",
-		link: "#",
-		src: "images/Vector.png",
-		alt: "x-twitter",
-	},
-];
 const SendButton = () => (
 	<Button href="#text-buttons" color="inherit">
 		送出
@@ -134,63 +117,9 @@ function Footer() {
 										flexDirection="row"
 										justifyContent="space-around"
 									>
-										{socialLinks.map((value) => (
-											<ListItemButton
-												sx={{
-													paddingTop: 0.5,
-													paddingBottom: 0.5,
-													marginBottom: 2,
-													marginRight: 1,
-													backgroundColor: "#22252A",
-													borderRadius: "10px",
-												}}
-											>
-												<Box
-													component="img"
-													marginRight={0.5}
-													src={value.src}
-													alt={value.alt}
-												></Box>
-												<ListItemText>{value.title}</ListItemText>
-											</ListItemButton>
-										))}
-
-										{/* <ListItemButton
-											sx={{
-												paddingTop: 0.5,
-												paddingBottom: 0.5,
-												marginBottom: 2,
-												backgroundColor: "#22252A",
-												borderRadius: "10px",
-											}}
-										>
-											<Box
-												component="img"
-												marginRight={0.5}
-												src="images/facebook.png"
-												alt="facebook"
-											></Box>
-											<ListItemText>facebook</ListItemText>
-										</ListItemButton>
-
-										<ListItemButton>
-											<Box
-												component="img"
-												marginRight={0.5}
-												src="images/instagram.png"
-												alt="instagram"
-											></Box>
-											<ListItemText>instagram</ListItemText>
-										</ListItemButton>
-										<ListItemButton>
-											<Box
-												component="img"
-												marginRight={0.5}
-												src="images/Vector.png"
-												alt="x-twitter"
-											></Box>
-											<ListItemText>x-twitter</ListItemText>
-										</ListItemButton> */}
+										<Facebook />
+										<Instagram />
+										<Xtwitter />
 									</Box>
 								</List>
 
