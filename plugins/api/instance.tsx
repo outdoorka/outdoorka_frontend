@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const instance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_BASE_URL_USER,
+	// baseURL: process.env.FRONTEND_URL,
 	headers: { "Content-Type": "application/json" },
 });
 

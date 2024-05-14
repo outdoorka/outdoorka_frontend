@@ -3,7 +3,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## env
 
 ```bash
-NEXT_PUBLIC_BASE_URL_USER=
+FRONTEND_URL=
 
 ```
 
