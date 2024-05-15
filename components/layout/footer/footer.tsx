@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Facebook from "@/components/layout/icons/facebook";
 import Instagram from "@/components/layout/icons/instagram";
-import Xtwitter from "@/components/layout/icons/Xtwitter";
+import Xtwitter from "@/components/layout/icons/xtwitter";
 
 const items = [
 	{

@@ -4,6 +4,8 @@ import { Box, ListItemButton, ListItemText } from "@mui/material";
 function Facebook() {
 	return (
 		<ListItemButton
+			href="https://www.facebook.com/"
+			target="_blank"
 			sx={{
 				paddingTop: 0.5,
 				paddingBottom: 0.5,

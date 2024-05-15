@@ -3,6 +3,8 @@ import { Box, ListItemButton, ListItemText } from "@mui/material";
 function Xtwitter() {
 	return (
 		<ListItemButton
+			href="https://twitter.com/"
+			target="_blank"
 			sx={{
 				paddingTop: 0.5,
 				paddingBottom: 0.5,
@@ -18,7 +20,7 @@ function Xtwitter() {
 				src="icons/xtwitter.svg"
 				alt="x-twitter"
 			></Box>
-			<ListItemText>x-twitter</ListItemText>
+			<ListItemText>X-twitter</ListItemText>
 		</ListItemButton>
 	);
 }

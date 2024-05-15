@@ -3,6 +3,8 @@ import { Box, ListItemButton, ListItemText } from "@mui/material";
 function Instagram() {
 	return (
 		<ListItemButton
+			href="https://www.instagram.com/"
+			target="_blank"
 			sx={{
 				paddingTop: 0.5,
 				paddingBottom: 0.5,
