@@ -21,6 +21,7 @@ import {
 import { LoginForm } from "@/types/AuthType";
 
 export default function Login() {
+	const router = useRouter();
 	const dispatch = useDispatch();
 	// const token = useSelector((state:any) => state.auth.token);
 
@@ -28,10 +29,10 @@ export default function Login() {
 		account: "",
 		password: "",
 	});
-	const [validAccount, setValidAccount] = useState("");
-	const [validPwd, setValidPwd] = useState("");
 	const [errorMsg, setErrorMsg] = useState("");
 	const [successMsg, setSuccessMsg] = useState("");
+	const [validAccount, setValidAccount] = useState("");
+	const [validPwd, setValidPwd] = useState("");
 
 	const EMAIL_REGEX = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/; // eslint-disable-line
 	const PWD_REGEX = /^[0-9a-zA-Z]{8,24}$/; // eslint-disable-line
@@ -65,8 +66,6 @@ export default function Login() {
 			[name]: value,
 		}));
 	};
-
-	const router = useRouter();
 
 	const handleSubmit = (e: { preventDefault: () => void }) => {
 		e.preventDefault();

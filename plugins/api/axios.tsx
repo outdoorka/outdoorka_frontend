@@ -4,7 +4,7 @@ import user from "@/api/user";
 import auth from "@/api/auth";
 
 export const URL = {
-	OUTDOORKA_URL: process.env.FRONTEND_URL || "http://localhost:3006",
+	OUTDOORKA_URL: process.env.NEXT_PUBLIC_BASE_URL_USER || "http://localhost:3006",
 };
 
 export default {

@@ -6,6 +6,7 @@ import { RegisterForm } from "@/types/AuthType";
 import axios from "@/plugins/api/axios";
 import NextLink from "next/link";
 import { logoutUser } from "@/features/user/authSlice";
+import { useRouter } from "next/router";
 
 import {
 	Grid,
@@ -22,6 +23,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export default function Register() {
 	const { user } = axios;
+	const router = useRouter();
 	const dispatch = useDispatch();
 	const logout = () => dispatch(logoutUser());
 	const [checked, setChecked] = useState(true);
@@ -120,13 +122,15 @@ export default function Register() {
 				password,
 				email: email,
 			});
-			// TODO: 調整寫法
+			// TODO: 確認其他例外錯誤
 			console.log(result);
-			if (result.error && result.status == 500) {
+			if (result.error && result.status == 409) {
 				setErrorMsg("此帳號已被註冊過");
 			} else if (result.data) {
-				// setSuccessMsg(result.message);
 				setSuccessMsg("註冊成功");
+				setTimeout(() => {
+					router.push("/");
+				}, 2000); // 2秒後跳轉到首頁
 			}
 		} catch (err) {
 			console.error(err);
