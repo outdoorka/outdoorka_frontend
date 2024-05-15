@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Provider } from "react-redux";
 import initializeStore from "@/features/index";
 

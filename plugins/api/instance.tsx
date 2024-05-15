@@ -1,8 +1,18 @@
 import axios from "axios";
+import { getCookie } from "cookies-next";
+// console.log(process.env.FRONTEND_URL);
+// console.log(process.env.NEXT_PUBLIC_BASE_URL_USER);
 
-const instance = axios.create();
+const instance = axios.create({
+	// baseURL: process.env.NEXT_PUBLIC_BASE_URL_USER,
+	headers: { "Content-Type": "application/json" },
+});
 
 const onRequest = (config: any) => {
+	const token = getCookie("OUTDOORKA_TOKEN");
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
 	return config;
 };
 
@@ -18,10 +28,9 @@ const onResponse = (response: any) => {
 
 const onError = (error: any) => {
 	const status = error?.response?.status || "500";
-
 	return {
-		status: `${status} - failure`,
-		error: error?.response?.data || {},
+		status: `${status}`,
+		error: error.response.data.message || error.response.data.errorMessage,
 	};
 };
 
