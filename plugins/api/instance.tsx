@@ -27,11 +27,19 @@ const onResponse = (response: any) => {
 };
 
 const onError = (error: any) => {
-	const status = error?.response?.status || "500";
-	return {
-		status: `${status}`,
-		error: error.response.data.message || error.response.data.errorMessage,
-	};
+	const { response } = error;
+
+	if (response) {
+		return {
+			status: `${ response.status || 500 }`,
+			error: response.data?.message || response.data?.errorMessage || "服務異常",
+		};
+	}else{
+		return {
+			status: 500,
+			error: "服務異常",
+		};
+	}
 };
 
 instance.interceptors.request.use(onRequest);

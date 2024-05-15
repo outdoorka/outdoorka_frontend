@@ -18,7 +18,7 @@ type Props = { userData: any; onEdit?: any };
 const { user } = axios;
 
 export default function UserProfile({ userData }: Props) {
-	const [gender, setGender] = React.useState(userData.gender);
+	const [gender, setGender] = React.useState(userData?.gender || "");
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
