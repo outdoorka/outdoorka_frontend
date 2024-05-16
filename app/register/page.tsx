@@ -6,7 +6,7 @@ import { RegisterForm } from "@/types/AuthType";
 import axios from "@/plugins/api/axios";
 import NextLink from "next/link";
 import { logoutUser } from "@/features/user/authSlice";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import {
 	Grid,

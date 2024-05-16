@@ -31,10 +31,11 @@ const onError = (error: any) => {
 
 	if (response) {
 		return {
-			status: `${ response.status || 500 }`,
-			error: response.data?.message || response.data?.errorMessage || "服務異常",
+			status: `${response.status || 500}`,
+			error:
+				response.data?.message || response.data?.errorMessage || "服務異常",
 		};
-	}else{
+	} else {
 		return {
 			status: 500,
 			error: "服務異常",

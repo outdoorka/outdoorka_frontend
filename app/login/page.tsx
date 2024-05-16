@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/features/user/authSlice";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import {
 	Grid,
