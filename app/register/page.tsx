@@ -22,7 +22,7 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export default function Register() {
-	const { user } = axios;
+	const { auth } = axios;
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const logout = () => dispatch(logoutUser());
@@ -116,7 +116,7 @@ export default function Register() {
 		setErrorMsg("");
 		setSuccessMsg("");
 		try {
-			const result = await user.registerUser({
+			const result = await auth.registerUser({
 				name,
 				mobile,
 				password,

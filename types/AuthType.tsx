@@ -24,3 +24,22 @@ export interface AuthState {
 	token: AuthItem | null;
 	profile: ProfileItem | null;
 }
+
+export interface ProfileOgItem {
+	_id: string;
+	email: string;
+	username: string;
+	nickName: string;
+	photo: string;
+	mobile: string;
+}
+
+export interface LoginOrganizerForm {
+	email: string;
+	password: string;
+}
+
+export interface OgAuthState {
+	token: AuthItem | null;
+	profile: ProfileOgItem | null;
+}

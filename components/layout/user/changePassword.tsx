@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
 	Box,
 	Button,
 	Grid,
-	Link,
-	TextField,
 	IconButton,
 	InputAdornment,
 	OutlinedInput,
@@ -15,12 +14,14 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axios from "@/plugins/api/axios";
+import { deleteCookie } from "cookies-next";
 
 type Props = { userData: any; onEdit?: any };
 
 const { user } = axios;
 
 export default function ChangePassword({ userData }: Props) {
+	const router = useRouter();
 	const [showPassword, setShowPassword] = React.useState("");
 
 	const handleClickShowPassword = (target: string) => {
@@ -61,6 +62,10 @@ export default function ChangePassword({ userData }: Props) {
 			.updateUserPassword(userData._id, postData)
 			.then((result: any) => {
 				console.log(result);
+				setTimeout(() => {
+					deleteCookie("OUTDOORKA_TOKEN");
+					router.push("/login");
+				}, 2000); // 2秒後跳轉到登入頁
 			})
 			.catch((err: any) => {
 				console.error(err);
