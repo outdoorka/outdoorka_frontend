@@ -1,19 +1,16 @@
-import { RegisterForm } from "@/types/AuthType";
-export default (axios: any, event: any) => ({
-	getUser(id: string) {
-		console.log("event", id);
-		return axios.get(`${event}/${id}`);
+const userApi = (axios: any, event: any) => ({
+	getUser() {
+		return axios.get(`${event}`);
 	},
 	updateUser(id: string, post: any) {
-		return axios.patch(`${event}/${id}`, post);
+		return axios.patch(`${event}`, post);
 	},
 	updateUserEmail(id: string, post: any) {
-		return axios.patch(`${event}/${id}/email`, post);
+		return axios.patch(`${event}/email`, post);
 	},
 	updateUserPassword(id: string, post: any) {
-		return axios.patch(`${event}/${id}/password`, post);
-	},
-	registerUser(post: RegisterForm) {
-		return axios.post(`${event}`, post);
+		return axios.patch(`${event}/password`, post);
 	},
 });
+
+export default userApi;
