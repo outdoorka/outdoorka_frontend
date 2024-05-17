@@ -31,7 +31,6 @@ export default function UserProfile({ userData }: Props) {
 			gender: gender,
 			birthday: data.get("birthday"),
 		};
-		console.log(postData);
 
 		if (!postData || !postData.name || !postData.mobile || !postData.birthday) {
 			console.error("請輸入完整資料");
@@ -109,14 +108,6 @@ export default function UserProfile({ userData }: Props) {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							{/* <TextField
-								required
-								fullWidth
-								id="gender"
-								label="姓別"
-								name="gender"
-								defaultValue={userData.gender}
-							/> */}
 							<FormControl fullWidth>
 								<InputLabel id="gender-label">Age</InputLabel>
 								<Select

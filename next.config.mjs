@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 import dotenv from "dotenv";
-import withBundleAnalyzer from "@next/bundle-analyzer";
+// import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const appEnv = process.env.APP_ENV || "production";
-const analyzeEnabled = process.env.ANALYZE === "true";
+// const analyzeEnabled = process.env.ANALYZE === "true";
 
 dotenv.config({
 	path: [`.env.${appEnv}`],
@@ -15,7 +15,7 @@ const nextConfig = {
 	// enabled: analyzeEnabled,
 	reactStrictMode: false,
 	trailingSlash: true,
-	output: "export",
+	// output: "export",
 	env: {
 		API_ENDPOINT: process.env.API_ENDPOINT,
 	},

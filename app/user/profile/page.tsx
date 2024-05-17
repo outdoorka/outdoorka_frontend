@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect } from "react";
-import { useParams } from "next/navigation";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import axios from "@/plugins/api/axios";
+import { getCookie } from "cookies-next";
 
-import UserProfile from "./userProfile";
-import ChangeEmail from "./changeEmail";
-import ChangePassword from "./changePassword";
+import UserProfile from "../../../components/layout/user/userProfile";
+import ChangeEmail from "../../../components/layout/user/changeEmail";
+import ChangePassword from "../../../components/layout/user/changePassword";
 
 import {
 	Box,
@@ -15,31 +15,27 @@ import {
 	ListItemIcon,
 	MenuItem,
 	MenuList,
-	TextField,
 	Typography,
 } from "@mui/material";
 
 const { user } = axios;
 
 function UserPage() {
-	const params = useParams<{ id: string }>();
 	const [userData, setUserData] = React.useState<any>({});
 	const [switchTab, setSwitchTab] = React.useState(0);
 
-	const { id } = params || {};
-
 	useEffect(() => {
-		if (!id) return;
+		const token = getCookie("OUTDOORKA_TOKEN");
+		if (!token) return console.log("no token");
 
 		const fetchUser = async () => {
-			const getUser = await user.getUser(id);
+			const getUser = await user.getUser();
 			if (!getUser || !getUser.data) return;
 			setUserData(getUser.data);
-			console.log(getUser.data);
 		};
 
 		fetchUser();
-	}, [id]);
+	}, []);
 
 	const handleSwitchTab = (tab: number) => {
 		setSwitchTab(tab);
