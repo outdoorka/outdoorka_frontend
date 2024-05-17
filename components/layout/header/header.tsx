@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 import {
 	AppBar,
@@ -36,17 +38,28 @@ const linkTiltes = [
 ];
 
 function Header() {
+	const scrollDownFlag = useScrollTrigger();
+	const logined = true;
 	return (
 		<div>
-			<AppBar position="sticky" color="inherit">
-				<Toolbar sx={{ backgroundColor: "#FDFCFF", padding: 2 }}>
+			<AppBar
+				elevation={scrollDownFlag ? 4 : 0}
+				sx={{
+					backgroundColor: scrollDownFlag ? "#D9D9D9" : "#FDFCFF",
+					color: "#4A4642",
+					transition: scrollDownFlag ? "0.3s" : "0.5s",
+					boxShadow: "none",
+					padding: "10px 0px",
+					elevation: scrollDownFlag ? 4 : 0,
+				}}
+			>
+				<Toolbar>
 					{linkTiltes.map((item, index) => (
 						<Link
 							color="inherit"
 							fontSize="inherit"
 							noWrap
 							key={index}
-							// variant="body2"
 							href={item.link}
 							underline="hover"
 							sx={{
@@ -54,8 +67,6 @@ function Header() {
 								marginRight: 3,
 								flexShrink: 0,
 								textDecoration: "none",
-
-								// text-decoration:"none";
 							}}
 							// className={classes.toolbarLink}
 						>
@@ -69,50 +80,61 @@ function Header() {
 						align="center"
 						noWrap
 						flex="1"
-						// className={classes.toolbarTitle}
 					>
 						<Box
 							component="img"
-							// marginRight={0.5}
-							src="images/logoHeader_2.png"
 							alt="揪好咖"
+							src={
+								scrollDownFlag
+									? "images/logoHeader_1.png"
+									: "images/logoHeader_2.png"
+							}
+							sx={{
+								transition: scrollDownFlag ? "0.3s" : "0.5s",
+								elevation: scrollDownFlag ? 4 : 0,
+							}}
 						></Box>
 					</Typography>
-					{/* 登入後 ------------------------------------------------*/}
-					{/* <Box>
-					<Box
-						borderRadius="5rem"
-						bgcolor="#EFF0F7"
-						display="inline-flex"
-						justifyContent="flex-start"
-						spacing={20}
-						padding={0.5}
-						alignItems="center"
-					>
-						<Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
-						<Box color="#22252A" margin={1}>
-							CIAO! Samew
+					<Box sx={{ display: logined ? "none" : "block" }}>
+						{/* 登入前 ------------------------------------------------*/}
+						<Button color="inherit" href="/login">
+							登入
+						</Button>
+						|
+						<Button color="inherit" href="/register">
+							註冊
+						</Button>
+					</Box>
+					<Box sx={{ display: !logined ? "none" : "block" }}>
+						<Box>
+							<Box
+								borderRadius="5rem"
+								bgcolor="#EFF0F7"
+								display="inline-flex"
+								justifyContent="flex-start"
+								spacing={20}
+								padding={0.5}
+								alignItems="center"
+							>
+								<Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
+								<Box color="#22252A" margin={1}>
+									CIAO! Samew
+								</Box>
+							</Box>
+
+							<IconButton color="inherit">
+								<Badge badgeContent={4} color="secondary">
+									<img src="icons/ticket.svg" />
+								</Badge>
+							</IconButton>
+
+							<IconButton color="info">
+								<Badge badgeContent={4} color="secondary">
+									<img src="icons/liked.svg" />
+								</Badge>
+							</IconButton>
 						</Box>
 					</Box>
-					<IconButton color="inherit">
-						<Badge badgeContent={4} color="secondary">
-							票卷
-						</Badge>
-					</IconButton>
-					<IconButton color="inherit">
-						<Badge badgeContent={4} color="secondary">
-							愛心
-						</Badge>
-					</IconButton>
-				</Box> */}
-					{/* 登入前 ------------------------------------------------*/}
-					<Button color="inherit" href="/login">
-						登入
-					</Button>
-					|
-					<Button color="inherit" href="/register">
-						註冊
-					</Button>
 				</Toolbar>
 			</AppBar>
 		</div>
