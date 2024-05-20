@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
+
+import { RootState } from "@/types";
 import { RegisterForm } from "@/types/AuthType";
 import axios from "@/plugins/api/axios";
 import {
@@ -27,6 +30,13 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export default function Register() {
 	const router = useRouter();
+
+	const { profile: authUser } = useSelector((x: RootState) => x.auth);
+	useEffect(() => {
+		if (authUser) {
+			router.push("/");
+		}
+	}, [authUser, router]);
 
 	const [checked, setChecked] = useState(true);
 	const handleChange = () => {
@@ -244,8 +254,8 @@ export default function Register() {
 					label="手機"
 					variant="outlined"
 					margin="normal"
-					error={registerValid.email !== ""}
-					helperText={registerValid.email}
+					error={registerValid.mobile !== ""}
+					helperText={registerValid.mobile}
 					InputLabelProps={{ shrink: true }}
 					onChange={(
 						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -312,7 +322,6 @@ export default function Register() {
 			spacing={2}
 		>
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{
@@ -334,7 +343,6 @@ export default function Register() {
 			</Grid>
 
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{

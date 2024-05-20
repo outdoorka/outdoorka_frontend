@@ -1,14 +1,12 @@
 import React from "react";
 
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
-import { Container, Box, Unstable_Grid2 as Grid } from "@mui/material";
-
-import MainLayout from "@/components/layout/MainLayout/MainLayout";
+import { Box, Unstable_Grid2 as Grid } from "@mui/material";
 
 function Home() {
 	return (
 		<MainLayout>
-			<Grid container spacing={2} justifyContent="center">
+			<Grid container justifyContent="center">
 				<Grid xs={12}>
 					<Box sx={{height: "80vh",backgroundColor: "#F8F9FF"}}>banner</Box>
 				</Grid>

@@ -20,7 +20,7 @@ function Facebook() {
 			<Image
 				src={facebookSvg}
 				width={16}
-				height={18}
+				height={16}
 				alt="facebook"
 				style={{
 					marginRight: "8px"

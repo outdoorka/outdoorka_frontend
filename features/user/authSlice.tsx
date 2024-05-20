@@ -10,7 +10,7 @@ const { auth } = axios;
 const authSlice: any = createSlice({
 	name: "auth",
 	initialState: {
-		profile: getCookieObj(profileName),
+		profile: getCookieObj(profileName) || null,
 		error: null,
 	} as AuthState,
 	reducers: {

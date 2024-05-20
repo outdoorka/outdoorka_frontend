@@ -20,7 +20,7 @@ function Instagram() {
 			<Image
 				src={instagramSvg}
 				width={16}
-				height={18}
+				height={16}
 				alt="instagram"
 				style={{
 					marginRight: "8px"

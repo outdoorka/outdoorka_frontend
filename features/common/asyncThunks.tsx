@@ -7,7 +7,7 @@ export const createGenericAsyncThunk = (actionType: any, apiFunction: any) => {
 			const data = await apiFunction();
 			return data;
 		} catch (error: any) {
-			return rejectWithValue(error.toString());
+			return rejectWithValue(error);
 		}
 	});
 };
