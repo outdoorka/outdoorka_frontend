@@ -1,3 +1,4 @@
+import { AuthState } from "@/types/AuthType";
 export interface ActivitiesState {
 	items: any[];
 	status: string | null;
@@ -6,4 +7,5 @@ export interface ActivitiesState {
 
 export interface RootState {
 	activities: ActivitiesState;
+	auth: AuthState;
 }

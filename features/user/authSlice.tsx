@@ -1,49 +1,46 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/plugins/api/axios";
-import { deleteCookie, setCookie } from "cookies-next";
+import { getCookieObj, removeCookie, setCookie } from "@/utils/cookieHandler"
+import { AuthState, ProfileItem, LoginForm } from "@/types/AuthType";
 
-import { AuthState, ProfileItem, AuthItem, LoginForm } from "@/types/AuthType";
+const profileName = "OUTDOORKA_USER";
+const tokenName = "OUTDOORKA_TOKEN";
 const { auth } = axios;
 
 const authSlice: any = createSlice({
 	name: "auth",
 	initialState: {
-		token: null,
-		profile: null,
+		profile: getCookieObj(profileName),
+		error: null
 	} as AuthState,
 	reducers: {
 		logoutUser: (state: AuthState) => {
-			state.token = null;
 			state.profile = null;
-			deleteCookie("OUTDOORKA_TOKEN");
+			removeCookie(profileName);
+			removeCookie(tokenName);
+			// TODO: 倒轉到首頁
 		},
 	},
 	extraReducers: (builder: any) => {
-		builder.addCase(loginUser.pending, (state: AuthState, action: any) => {
-			// loading start
-			state.token = null;
-			state.profile = null;
+		const { pending, fulfilled, rejected } = loginUser;
+		builder.addCase(pending, (state: AuthState) => {
+			state.error = null;
 		});
-		builder.addCase(loginUser.rejected, (state: AuthState, action: any) => {
-			console.log("rejected");
-			console.log(state);
-			state.token = null;
-			state.profile = null;
-		});
-		builder.addCase(loginUser.fulfilled, (state: AuthState, action: any) => {
-			// loading end
+		builder.addCase(fulfilled, (state: AuthState, action: any) => {
 			if (action.payload.error) {
-				state.token = null;
 				state.profile = null;
-				deleteCookie("OUTDOORKA_TOKEN");
+				removeCookie(profileName);
+				removeCookie(tokenName);
+
 			} else if (action.payload.data) {
 				const { user, token } = action.payload.data;
 				state.profile = user as ProfileItem;
-				state.token = token as AuthItem;
-				setCookie("OUTDOORKA_TOKEN", token.access_token, {
-					maxAge: 60 * 60 * 24,
-				});
+				setCookie(profileName, JSON.stringify(user), 1);
+				setCookie(tokenName, token.access_token, 1);
 			}
+		});
+		builder.addCase(rejected, (state: AuthState, action: any) => {
+			state.error = action.error;
 		});
 	},
 });

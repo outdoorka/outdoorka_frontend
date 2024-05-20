@@ -21,8 +21,8 @@ export interface ProfileItem {
 	name: string;
 }
 export interface AuthState {
-	token: AuthItem | null;
 	profile: ProfileItem | null;
+	error: string | null;
 }
 
 export interface ProfileOgItem {
