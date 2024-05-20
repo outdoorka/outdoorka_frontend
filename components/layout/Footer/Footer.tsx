@@ -70,10 +70,13 @@ function Footer() {
 						flexDirection="row"
 						justifyContent="space-around"
 					>
-						{items.map((list) => (
-							<List sx={{ padding: 0 }}>
+						{items.map((list, listIndex) => (
+							<List 
+								sx={{ padding: 0 }} 
+								key={listIndex}
+							>
 								{list.item.map((value, index) => (
-									<ListItem sx={{ padding: 0 }}>
+									<ListItem sx={{ padding: 0 }} key={index}>
 										<ListItemText
 											primary={
 												<span
@@ -87,7 +90,6 @@ function Footer() {
 												</span>
 											}
 										/>
-										{/* {value} */}
 									</ListItem>
 								))}
 							</List>

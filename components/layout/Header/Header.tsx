@@ -35,7 +35,7 @@ const linkTiltes = [
 	},
 	{
 		title: "活動",
-		link: "#",
+		link: "/activities",
 	},
 	{
 		title: "優良主揪",
@@ -115,7 +115,6 @@ function Header() {
 								flexShrink: 0,
 								textDecoration: "none",
 							}}
-							// className={classes.toolbarLink}
 						>
 							{item.title}
 						</Link>
@@ -136,6 +135,7 @@ function Header() {
 								style={{
 									transition: scrollDownFlag ? "0.3s" : "0.5s",
 								}}
+								priority={true}	
 							/>
 						):(
 							<Image
@@ -146,6 +146,7 @@ function Header() {
 								style={{
 									transition: scrollDownFlag ? "0.3s" : "0.5s",
 								}}
+								priority={true}	
 							/>
 						)
 					}
@@ -208,6 +209,19 @@ function Header() {
 											padding: 2,
 											backgroundColor: "#fff"
 										}}>
+											<Box sx={{
+												display: "inline-flex",
+												marginBottom: 1
+											}}>
+												<Avatar sx={{ 
+													width: 40, 
+													height: 40,
+													marginRight: 1
+												}}>M</Avatar>
+												<p>
+													{authUser.name}
+												</p>
+											</Box>
 											<MenuItem onClick={lintToProfile}>管理帳號</MenuItem>
 											<MenuItem onClick={handleClose}>我的收藏</MenuItem>
 											<MenuItem onClick={handleClose}>我的票卷</MenuItem>

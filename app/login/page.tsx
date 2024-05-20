@@ -1,9 +1,11 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import NextLink from "next/link";
+import { ChangeEvent, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import NextLink from "next/link";
+
+import { RootState } from "@/types";
 import { LoginForm } from "@/types/AuthType";
 import { loginUser } from "@/features/user/authSlice";
 import { EMAIL_REGEX, PWD_REGEX } from "@/utils/regexHandler";
@@ -24,6 +26,13 @@ import {
 export default function Login() {
 	const router = useRouter();
 	const dispatch = useDispatch();
+
+	const { profile: authUser } = useSelector((x: RootState) => x.auth);
+	useEffect(() => {
+		if (authUser) {
+			router.push("/");
+		}
+	}, [authUser, router]);
 
 	const [errorMsg, setErrorMsg] = useState("");
 	const [successMsg, setSuccessMsg] = useState("");
@@ -82,7 +91,7 @@ export default function Login() {
 				setSuccessMsg(res.payload.message);
 				// 2秒後跳轉到首頁
 				setTimeout(() => {
-					router.push("/");
+					router.replace("/");
 				}, 2000);
 			} else if (res.payload.error) {
 				setErrorMsg(res.payload.error);
@@ -99,7 +108,6 @@ export default function Login() {
 			spacing={2}
 		>
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{
@@ -110,8 +118,6 @@ export default function Login() {
 					component="img"
 					sx={{
 						objectFit: "cover",
-					}}
-					style={{
 						height: "100dvh",
 					}}
 					display={{ xs: "none", md: "block" }}
@@ -121,7 +127,6 @@ export default function Login() {
 			</Grid>
 
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{
@@ -135,7 +140,6 @@ export default function Login() {
 					}}
 				>
 					<Box component="form" noValidate autoComplete="off">
-						{/* {token} */}
 						<Box
 							component="img"
 							sx={{
