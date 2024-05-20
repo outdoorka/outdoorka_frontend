@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, Fragment } from "react";
-import Image from "next/image"
+import Image from "next/image";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/types";
 import { logoutUser } from "@/features/user/authSlice";
@@ -10,7 +12,6 @@ import {
 	AppBar,
 	Box,
 	Link,
-	Typography,
 	Avatar,
 	IconButton,
 	Badge,
@@ -21,6 +22,11 @@ import {
 	useScrollTrigger,
 	ClickAwayListener,
 } from "@mui/material";
+
+import LogoHeader1 from "@/public/images/logoHeader_1.svg"
+import LogoHeader2 from "@/public/images/logoHeader_2.svg"
+import TicketSvg from "@/public/icons/ticket.svg"
+import LikedSvg from "@/public/icons/liked.svg"
 
 const linkTiltes = [
 	{
@@ -70,6 +76,11 @@ function Header() {
 		dispatch(logoutUser());
 		setAnchorEl(null);
 	}
+	const router = useRouter();
+	const lintToProfile = () => {
+		router.push("/user/profile/");
+		setAnchorEl(null);
+	}
 
 	const [isClient, setIsClient] = useState(false);
 	useEffect(() => {
@@ -111,28 +122,34 @@ function Header() {
 					))}
 				</Box>
 
-				<Typography
-					component="h2"
-					variant="h5"
-					color="inherit"
-					align="center"
-					noWrap
-					flex="1"
+				<Button
+					component={NextLink}
+					href="/"
 				>
-					<Box
-						component="img"
-						alt="揪好咖"
-						src={
-							scrollDownFlag
-								? "images/logoHeader_1.png"
-								: "images/logoHeader_2.png"
-						}
-						sx={{
-							transition: scrollDownFlag ? "0.3s" : "0.5s",
-							elevation: scrollDownFlag ? 4 : 0,
-						}}
-					></Box>
-				</Typography>
+					{
+						scrollDownFlag? (
+							<Image
+								src={LogoHeader2}
+								width={150}
+								height={48}
+								alt="揪好咖"
+								style={{
+									transition: scrollDownFlag ? "0.3s" : "0.5s",
+								}}
+							/>
+						):(
+							<Image
+								src={LogoHeader1}
+								width={100}
+								height={48}
+								alt="揪好咖"
+								style={{
+									transition: scrollDownFlag ? "0.3s" : "0.5s",
+								}}
+							/>
+						)
+					}
+				</Button>
 
 				<Fragment>
 					{
@@ -195,7 +212,7 @@ function Header() {
 											padding: 2,
 											backgroundColor: "#fff"
 										}}>
-											<MenuItem onClick={handleClose}>
+											<MenuItem onClick={lintToProfile}>
 												管理帳號
 											</MenuItem>
 											<MenuItem onClick={handleClose}>
@@ -214,7 +231,7 @@ function Header() {
 								<IconButton color="inherit" sx={{ mr: 1 }}>
 									<Badge badgeContent={4} color="secondary">
 										<Image
-											src="icons/ticket.svg"
+											src={TicketSvg}
 											width={24}
 											height={24}
 											alt="ticket"
@@ -225,7 +242,7 @@ function Header() {
 								<IconButton color="info">
 									<Badge badgeContent={4} color="secondary">
 										<Image
-											src="icons/liked.svg"
+											src={LikedSvg}
 											width={24}
 											height={24}
 											alt="liked"
