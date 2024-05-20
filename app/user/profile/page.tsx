@@ -4,13 +4,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import axios from "@/plugins/api/axios";
 import { getCookie } from "cookies-next";
 
-import UserProfile from "../../../components/layout/user/userProfile";
-import ChangeEmail from "../../../components/layout/user/changeEmail";
-import ChangePassword from "../../../components/layout/user/changePassword";
+import MainLayout from "@/components/layout/MainLayout/MainLayout";
+import UserProfile from "@/components/layout/user/userProfile";
+import ChangeEmail from "@/components/layout/user/changeEmail";
+import ChangePassword from "@/components/layout/user/changePassword";
 
 import {
 	Box,
-	Container,
 	Grid,
 	ListItemIcon,
 	MenuItem,
@@ -42,7 +42,7 @@ function UserPage() {
 	};
 
 	return (
-		<Container component="main" maxWidth="md">
+		<MainLayout>
 			<Box
 				sx={{
 					marginTop: 8,
@@ -112,7 +112,7 @@ function UserPage() {
 					</Grid>
 				</Grid>
 			</Box>
-		</Container>
+		</MainLayout>
 	);
 }
 
