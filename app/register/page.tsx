@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { RegisterForm } from "@/types/AuthType";
 import axios from "@/plugins/api/axios";
-import { EMAIL_REGEX, PWD_REGEX, NAME_REGEX, TW_PHONE_REGEX } from "@/utils/regexHandler";
+import {
+	EMAIL_REGEX,
+	PWD_REGEX,
+	NAME_REGEX,
+	TW_PHONE_REGEX,
+} from "@/utils/regexHandler";
 
 import {
 	Unstable_Grid2 as Grid,
@@ -213,7 +218,9 @@ export default function Register() {
 					error={registerValid.name !== ""}
 					helperText={registerValid.name}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+					onChange={(
+						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+					) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -226,7 +233,9 @@ export default function Register() {
 					error={registerValid.email !== ""}
 					helperText={registerValid.email}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+					onChange={(
+						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+					) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -238,7 +247,9 @@ export default function Register() {
 					error={registerValid.email !== ""}
 					helperText={registerValid.email}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+					onChange={(
+						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+					) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -251,7 +262,9 @@ export default function Register() {
 					error={registerValid.password !== ""}
 					helperText={registerValid.password}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+					onChange={(
+						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+					) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -264,7 +277,9 @@ export default function Register() {
 					error={registerValid.confirm !== ""}
 					helperText={registerValid.confirm}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+					onChange={(
+						event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+					) => handleInputChange(event)}
 				/>
 				<Typography
 					variant="body1"
@@ -279,7 +294,7 @@ export default function Register() {
 					type="submit"
 					variant="contained"
 					size="large"
-					disabled={Object.values(registerValid).some(value => value !== "")}
+					disabled={Object.values(registerValid).some((value) => value !== "")}
 					onClick={handleSubmit}
 				>
 					註冊
