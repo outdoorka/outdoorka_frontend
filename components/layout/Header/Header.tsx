@@ -63,7 +63,7 @@ function Header() {
 	const handleClose = (event: Event | React.SyntheticEvent) => {
 		if (
 			anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
+			anchorRef.current.contains(event.target as HTMLElement)
 		) {
 			return;
 		}
@@ -71,16 +71,16 @@ function Header() {
 	};
 
 	const dispatch = useDispatch();
-	const { profile: authUser } = useSelector((x:RootState) => x.auth);
+	const { profile: authUser } = useSelector((x: RootState) => x.auth);
 	const logout = () => {
 		dispatch(logoutUser());
 		setAnchorEl(null);
-	}
+	};
 	const router = useRouter();
 	const lintToProfile = () => {
 		router.push("/user/profile/");
 		setAnchorEl(null);
-	}
+	};
 
 	const [isClient, setIsClient] = useState(false);
 	useEffect(() => {
@@ -99,7 +99,7 @@ function Header() {
 				elevation: scrollDownFlag ? 4 : 0,
 			}}
 		>
-			<Toolbar sx={{justifyContent: "space-between"}}>
+			<Toolbar sx={{ justifyContent: "space-between" }}>
 				<Box>
 					{linkTiltes.map((item, index) => (
 						<Link
@@ -152,8 +152,8 @@ function Header() {
 				</Button>
 
 				<Fragment>
-					{
-						isClient ? (!authUser ? (
+					{isClient ? (
+						!authUser ? (
 							<Box>
 								<Button color="inherit" href="/login">
 									登入
@@ -163,25 +163,21 @@ function Header() {
 									註冊
 								</Button>
 							</Box>
-						):(
+						) : (
 							<Box>
 								<Box
 									bgcolor="#EFF0F7"
 									display="inline-flex"
 									justifyContent="flex-start"
 									alignItems="center"
-									sx={{ 
+									sx={{
 										mr: 1,
 										p: 1,
-										borderRadius:"5rem"
+										borderRadius: "5rem",
 									}}
 								>
-									<IconButton 
-										ref={anchorRef}
-										onClick={handleClick}>
-										<Avatar sx={{ width: 40, height: 40 }}>
-											M
-										</Avatar>
+									<IconButton ref={anchorRef} onClick={handleClick}>
+										<Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
 									</IconButton>
 									<Box color="#22252A" margin={1}>
 										CIAO! {authUser.name}
@@ -197,13 +193,13 @@ function Header() {
 										transformOrigin={{ horizontal: "left", vertical: "top" }}
 										anchorOrigin={{ horizontal: "left", vertical: "top" }}
 										PaperProps={{
-											sx:{
-												width:336,
+											sx: {
+												width: 336,
 												px: 1,
 												borderRadius: "8px",
 												backdropFilter: "invert(5%)",
-												backgroundColor: "rgba(255, 255, 255, .5)"
-											}
+												backgroundColor: "rgba(255, 255, 255, .5)",
+											},
 										}}
 									>
 										<Box sx={{
@@ -212,18 +208,10 @@ function Header() {
 											padding: 2,
 											backgroundColor: "#fff"
 										}}>
-											<MenuItem onClick={lintToProfile}>
-												管理帳號
-											</MenuItem>
-											<MenuItem onClick={handleClose}>
-												我的收藏
-											</MenuItem>
-											<MenuItem onClick={handleClose}>
-												我的票卷
-											</MenuItem>
-											<MenuItem onClick={logout}>
-												登出
-											</MenuItem>
+											<MenuItem onClick={lintToProfile}>管理帳號</MenuItem>
+											<MenuItem onClick={handleClose}>我的收藏</MenuItem>
+											<MenuItem onClick={handleClose}>我的票卷</MenuItem>
+											<MenuItem onClick={logout}>登出</MenuItem>
 										</Box>
 									</Menu>
 								</ClickAwayListener>
@@ -249,13 +237,11 @@ function Header() {
 										/>
 									</Badge>
 								</IconButton>
-
 							</Box>
-						) 
-						):(
-							<Box sx={{width:290}}></Box>
 						)
-					}
+					) : (
+						<Box sx={{ width: 290 }}></Box>
+					)}
 				</Fragment>
 			</Toolbar>
 		</AppBar>

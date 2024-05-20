@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/plugins/api/axios";
-import { getCookieObj, removeCookie, setCookie } from "@/utils/cookieHandler"
+import { getCookieObj, removeCookie, setCookie } from "@/utils/cookieHandler";
 import { AuthState, ProfileItem, LoginForm } from "@/types/AuthType";
 
 const profileName = "OUTDOORKA_USER";
@@ -11,7 +11,7 @@ const authSlice: any = createSlice({
 	name: "auth",
 	initialState: {
 		profile: getCookieObj(profileName),
-		error: null
+		error: null,
 	} as AuthState,
 	reducers: {
 		logoutUser: (state: AuthState) => {
@@ -31,7 +31,6 @@ const authSlice: any = createSlice({
 				state.profile = null;
 				removeCookie(profileName);
 				removeCookie(tokenName);
-
 			} else if (action.payload.data) {
 				const { user, token } = action.payload.data;
 				state.profile = user as ProfileItem;

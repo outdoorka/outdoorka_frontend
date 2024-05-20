@@ -158,7 +158,9 @@ export default function Login() {
 								error={loginValid.account !== ""}
 								helperText={loginValid.account}
 								InputLabelProps={{ shrink: true }}
-								onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+								onChange={(
+									event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+								) => handleInputChange(event)}
 							/>
 							<TextField
 								required
@@ -170,7 +172,9 @@ export default function Login() {
 								error={loginValid.password !== ""}
 								helperText={loginValid.password}
 								InputLabelProps={{ shrink: true }}
-								onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
+								onChange={(
+									event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+								) => handleInputChange(event)}
 							/>
 							<Button
 								variant="contained"
@@ -180,7 +184,9 @@ export default function Login() {
 									marginBottom: 1,
 								}}
 								onClick={handleSubmit}
-								disabled={loginValid.account !== "" || loginValid.password !== ""}
+								disabled={
+									loginValid.account !== "" || loginValid.password !== ""
+								}
 							>
 								登入
 							</Button>

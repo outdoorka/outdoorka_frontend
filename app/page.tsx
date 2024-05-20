@@ -1,11 +1,9 @@
 import React from "react";
-import { 
-	Box,
-	Unstable_Grid2 as Grid,
-} from "@mui/material";
 
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
+import { Container, Box, Unstable_Grid2 as Grid } from "@mui/material";
 
+import MainLayout from "@/components/layout/MainLayout/MainLayout";
 
 function Home() {
 	return (
