@@ -1,7 +1,7 @@
 import { LoginForm, LoginOrganizerForm, RegisterForm } from "@/types/AuthType";
 
 const auth = (axios: any, event: any) => ({
-	registerUser(post: RegisterForm) {
+	registerEndUser(post: RegisterForm) {
 		return axios.post(`${event}/register`, post);
 	},
 	loginEndUser(post: LoginForm) {

@@ -1,15 +1,14 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import NextLink from "next/link";
 import { RegisterForm } from "@/types/AuthType";
 import axios from "@/plugins/api/axios";
-import NextLink from "next/link";
-import { logoutUser } from "@/features/user/authSlice";
-import { useRouter } from "next/navigation";
+import { EMAIL_REGEX, PWD_REGEX, NAME_REGEX, TW_PHONE_REGEX } from "@/utils/regexHandler";
 
 import {
-	Grid,
+	Unstable_Grid2 as Grid,
 	Box,
 	Typography,
 	Fade,
@@ -22,13 +21,21 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export default function Register() {
-	const { auth } = axios;
 	const router = useRouter();
-	const dispatch = useDispatch();
-	const logout = () => dispatch(logoutUser());
+
 	const [checked, setChecked] = useState(true);
 	const handleChange = () => {
 		setChecked((prev) => !prev);
+	};
+
+	const [errorMsg, setErrorMsg] = useState("");
+	const [successMsg, setSuccessMsg] = useState("");
+	const displayName: Record<keyof RegisterForm, string> = {
+		name: "姓名",
+		mobile: "手機",
+		email: "帳號",
+		password: "密碼",
+		confirm: "確認密碼",
 	};
 	const [registerForm, setRegisterForm] = useState<RegisterForm>({
 		name: "",
@@ -37,18 +44,13 @@ export default function Register() {
 		password: "",
 		confirm: "",
 	});
-	const [errorMsg, setErrorMsg] = useState("");
-	const [successMsg, setSuccessMsg] = useState("");
-	const [validName, setValidName] = useState("");
-	const [validEmail, setValidEmail] = useState("");
-	const [validMobile, setValidMobile] = useState("");
-	const [validPwd, setValidPwd] = useState("");
-	const [validMatch, setValidMatch] = useState("");
-
-	const NAME_REGEX = /^[\u4E00-\u9FA5\w]{3,23}$/; // eslint-disable-line
-	const TW_PHONE_REGEX = /^09\d{8}$/; // eslint-disable-line
-	const EMAIL_REGEX = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/; // eslint-disable-line
-	const PWD_REGEX = /^[0-9a-zA-Z]{8,24}$/; // eslint-disable-line
+	const [registerValid, setRegisterValid] = useState<RegisterForm>({
+		name: "",
+		mobile: "",
+		email: "",
+		password: "",
+		confirm: "",
+	});
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -56,50 +58,28 @@ export default function Register() {
 		e.preventDefault();
 		const { name, value } = e.target;
 
-		if (name === "name") {
+		if (name in displayName) {
+			const fieldName = name as keyof RegisterForm;
+			const displayStr = displayName[fieldName];
+			let errorMessage = "";
 			if (value === "") {
-				setValidName("請輸入姓名");
-			} else if (!NAME_REGEX.test(value)) {
-				setValidName("請確認姓名格式，僅接受中文及英數字");
-			} else {
-				setValidName("");
+				errorMessage = `請輸入${displayStr}`;
+			} else if (fieldName === "name" && !NAME_REGEX.test(value)) {
+				errorMessage = "請確認姓名格式，僅接受中文及英數字";
+			} else if (fieldName === "mobile" && !TW_PHONE_REGEX.test(value)) {
+				errorMessage = "請確認手機格式，格式為0912345678";
+			} else if (fieldName === "email" && !EMAIL_REGEX.test(value)) {
+				errorMessage = "請輸入Email格式";
+			} else if (fieldName === "password" && !PWD_REGEX.test(value)) {
+				errorMessage = "請輸入正確密碼格式，8-20碼至少包含一個大小寫英數字";
+			} else if (fieldName === "confirm" && registerForm.password !== value) {
+				errorMessage = "請確認密碼輸入一致";
 			}
-		}
 
-		if (name === "mobile") {
-			if (value === "") {
-				setValidMobile("請輸入手機");
-			} else if (!TW_PHONE_REGEX.test(value)) {
-				setValidMobile("請確認手機格式，格式為0900000000");
-			} else {
-				setValidMobile("");
-			}
-		}
-
-		if (name === "email") {
-			if (value === "") {
-				setValidEmail("請輸入帳號");
-			} else if (!EMAIL_REGEX.test(value)) {
-				setValidEmail("請輸入Email格式");
-			} else {
-				setValidEmail("");
-			}
-		}
-		if (name === "password") {
-			if (value === "") {
-				setValidPwd("請輸入密碼");
-			} else if (!PWD_REGEX.test(value)) {
-				setValidPwd("請確認正確密碼格式，規則為大小寫英數字並且至少八碼");
-			} else {
-				setValidPwd("");
-			}
-		}
-		if (name === "confirm") {
-			if (registerForm.password !== value) {
-				setValidMatch("請輸入確認密碼一致");
-			} else if (value !== "") {
-				setValidMatch("");
-			}
+			setRegisterValid((prevValid) => ({
+				...prevValid,
+				[fieldName]: errorMessage,
+			}));
 		}
 
 		setRegisterForm((prevForm) => ({
@@ -108,6 +88,7 @@ export default function Register() {
 		}));
 	};
 
+	const { auth } = axios;
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 		const { email, password, mobile, name } = registerForm;
@@ -116,21 +97,20 @@ export default function Register() {
 		setErrorMsg("");
 		setSuccessMsg("");
 		try {
-			const result = await auth.registerUser({
+			const result = await auth.registerEndUser({
 				name,
 				mobile,
 				password,
 				email: email,
 			});
-			// TODO: 確認其他例外錯誤
-			console.log(result);
 			if (result.error && result.status == 409) {
 				setErrorMsg("此帳號已被註冊過");
 			} else if (result.data) {
 				setSuccessMsg("註冊成功");
+				// 2秒後跳轉到首頁
 				setTimeout(() => {
-					router.push("/");
-				}, 2000); // 2秒後跳轉到首頁
+					router.push("/login");
+				}, 2000);
 			}
 		} catch (err) {
 			console.error(err);
@@ -184,7 +164,6 @@ export default function Register() {
 					立即登入
 				</MuiLink>
 			</Typography>
-			<button onClick={logout}>登出</button>
 		</Box>
 	);
 
@@ -231,10 +210,10 @@ export default function Register() {
 					label="姓名"
 					variant="outlined"
 					margin="normal"
-					error={validName !== ""}
-					helperText={validName}
+					error={registerValid.name !== ""}
+					helperText={registerValid.name}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event) => handleInputChange(event)}
+					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -244,10 +223,10 @@ export default function Register() {
 					label="帳號"
 					variant="outlined"
 					margin="normal"
-					error={validEmail !== ""}
-					helperText={validEmail}
+					error={registerValid.email !== ""}
+					helperText={registerValid.email}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event) => handleInputChange(event)}
+					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -256,10 +235,10 @@ export default function Register() {
 					label="手機"
 					variant="outlined"
 					margin="normal"
-					error={validMobile !== ""}
-					helperText={validMobile}
+					error={registerValid.email !== ""}
+					helperText={registerValid.email}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event) => handleInputChange(event)}
+					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
 				/>
 				<TextField
 					required
@@ -269,22 +248,23 @@ export default function Register() {
 					label="輸入密碼"
 					variant="outlined"
 					margin="normal"
-					error={validPwd !== ""}
-					helperText={validPwd}
+					error={registerValid.password !== ""}
+					helperText={registerValid.password}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event) => handleInputChange(event)}
+					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
 				/>
 				<TextField
 					required
 					name="confirm"
+					type="password"
 					value={registerForm.confirm}
 					label="確認密碼"
 					variant="outlined"
 					margin="normal"
-					error={validMatch !== ""}
-					helperText={validMatch}
+					error={registerValid.confirm !== ""}
+					helperText={registerValid.confirm}
 					InputLabelProps={{ shrink: true }}
-					onChange={(event) => handleInputChange(event)}
+					onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange(event)}
 				/>
 				<Typography
 					variant="body1"
@@ -295,18 +275,11 @@ export default function Register() {
 					註冊即表示您已閱讀並同意
 					<span>服務條款</span>及<span>隱私權政策</span>
 				</Typography>
-
 				<Button
 					type="submit"
 					variant="contained"
 					size="large"
-					disabled={
-						validName !== "" ||
-						validEmail !== "" ||
-						validMobile !== "" ||
-						validPwd !== "" ||
-						validMatch !== ""
-					}
+					disabled={Object.values(registerValid).some(value => value !== "")}
 					onClick={handleSubmit}
 				>
 					註冊
