@@ -5,8 +5,9 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { getProfileCookieObj } from "@/utils/cookieHandler";
 import { RootState } from "@/types";
-import { logoutUser } from "@/features/user/authSlice";
+import { logoutUser, setProfile } from "@/features/user/authSlice";
 
 import {
 	AppBar,
@@ -51,9 +52,22 @@ const linkTiltes = [
 	},
 ];
 
-function Header() {
-	const scrollDownFlag = useScrollTrigger();
 
+function Header() {
+	const dispatch = useDispatch();
+	const router = useRouter();
+	const [isClient, setIsClient] = useState(false);
+	const { profile } = useSelector((x: RootState) => x.auth);
+	const userProfile = getProfileCookieObj()
+
+	useEffect(() => {
+		setIsClient(true);
+		if (!profile && userProfile) {
+			dispatch(setProfile(userProfile));
+		}
+	}, [profile, userProfile, dispatch]);
+
+	const scrollDownFlag = useScrollTrigger();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,22 +84,18 @@ function Header() {
 		setAnchorEl(null);
 	};
 
-	const dispatch = useDispatch();
-	const { profile: authUser } = useSelector((x: RootState) => x.auth);
 	const logout = () => {
 		dispatch(logoutUser());
 		setAnchorEl(null);
 	};
-	const router = useRouter();
 	const lintToProfile = () => {
 		router.push("/user/profile/");
 		setAnchorEl(null);
 	};
 
-	const [isClient, setIsClient] = useState(false);
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
+  // const drawer = (
+
+	// )
 
 	return (
 		<AppBar
@@ -96,19 +106,18 @@ function Header() {
 				transition: scrollDownFlag ? "0.3s" : "0.5s",
 				boxShadow: "none",
 				padding: "10px 0px",
-				elevation: scrollDownFlag ? 4 : 0,
 			}}
 		>
 			<Toolbar sx={{ justifyContent: "space-between" }}>
-				<Box>
+				<Box sx={{ display: { sm: "none", md: "block" } }}>
 					{linkTiltes.map((item, index) => (
 						<Link
 							color="inherit"
 							fontSize="inherit"
+							underline="hover"
 							noWrap
 							key={index}
 							href={item.link}
-							underline="hover"
 							sx={{
 								padding: 1,
 								marginRight: 3,
@@ -154,7 +163,7 @@ function Header() {
 
 				<Fragment>
 					{isClient ? (
-						!authUser ? (
+						!profile ? (
 							<Box>
 								<Button color="inherit" href="/login">
 									登入
@@ -181,7 +190,7 @@ function Header() {
 										<Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
 									</IconButton>
 									<Box color="#22252A" margin={1}>
-										CIAO! {authUser.name}
+										CIAO! {profile.name}
 									</Box>
 								</Box>
 								<ClickAwayListener onClickAway={handleClose}>
@@ -219,7 +228,7 @@ function Header() {
 													marginRight: 1
 												}}>M</Avatar>
 												<p>
-													{authUser.name}
+													{profile.name}
 												</p>
 											</Box>
 											<MenuItem onClick={lintToProfile}>管理帳號</MenuItem>
