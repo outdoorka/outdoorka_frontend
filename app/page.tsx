@@ -1,6 +1,7 @@
 import React from "react";
 
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
+import NewActivities from "@/components/layout/home/NewActivities";
 import { Box, Unstable_Grid2 as Grid } from "@mui/material";
 
 function Home() {
@@ -10,11 +11,11 @@ function Home() {
 				<Grid xs={12}>
 					<Box sx={{height: "80vh",backgroundColor: "#F8F9FF"}}>banner</Box>
 				</Grid>
-				<Grid xs={12}>
+				<Grid xs={12} maxWidth="xl">
 					<Box sx={{height: "100vh",backgroundColor: "#F8F9FF"}}>熱門活動</Box>
 				</Grid>
 				<Grid xs={12}>
-					<Box sx={{height: "50vh",backgroundColor: "#F8F9FF"}}>最新活動</Box>
+					<NewActivities/>
 				</Grid>
 				<Grid xs={10} >
 					<Box sx={{height: "80vh",backgroundColor: "#F8F9FF"}}>活動探索</Box>

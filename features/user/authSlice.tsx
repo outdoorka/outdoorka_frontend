@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/plugins/api/axios";
-import { getCookieObj, removeCookie, setCookie } from "@/utils/cookieHandler";
+import { tokenName, profileName, getProfileCookieObj, removeCookie, setProfileCookie, setCookie } from "@/utils/cookieHandler";
 import { AuthState, ProfileItem, LoginForm } from "@/types/AuthType";
-
-const profileName = "OUTDOORKA_USER";
-const tokenName = "OUTDOORKA_TOKEN";
 const { auth } = axios;
+
+export const loginUser = createAsyncThunk(
+	"auth/loginUser",
+	async (loginForm: LoginForm) => {
+		const res = await auth.loginEndUser(loginForm);
+		return res;
+	},
+);
 
 const authSlice: any = createSlice({
 	name: "auth",
 	initialState: {
-		profile: getCookieObj(profileName) || null,
+		profile: getProfileCookieObj(),
 		error: null,
 	} as AuthState,
 	reducers: {
@@ -19,6 +24,10 @@ const authSlice: any = createSlice({
 			removeCookie(profileName);
 			removeCookie(tokenName);
 			// TODO: 倒轉到首頁
+		},
+		setProfile: (state: AuthState, action: any) => {
+			console.log(action);
+			// state.profile = null;
 		},
 	},
 	extraReducers: (builder: any) => {
@@ -34,7 +43,7 @@ const authSlice: any = createSlice({
 			} else if (action.payload.data) {
 				const { user, token } = action.payload.data;
 				state.profile = user as ProfileItem;
-				setCookie(profileName, JSON.stringify(user), 1);
+				setProfileCookie(JSON.stringify(user), 1);
 				setCookie(tokenName, token.access_token, 1);
 			}
 		});
@@ -44,12 +53,5 @@ const authSlice: any = createSlice({
 	},
 });
 
-export const { logoutUser } = authSlice.actions;
-export const loginUser = createAsyncThunk(
-	"auth/loginUser",
-	async (loginForm: LoginForm) => {
-		const res = await auth.loginEndUser(loginForm);
-		return res;
-	},
-);
+export const { logoutUser, setProfile } = authSlice.actions;
 export default authSlice.reducer;

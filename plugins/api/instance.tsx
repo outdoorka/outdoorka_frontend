@@ -1,15 +1,13 @@
 import axios from "axios";
-import { getCookie } from "cookies-next";
-// console.log(process.env.FRONTEND_URL);
-// console.log(process.env.NEXT_PUBLIC_BASE_URL_USER);
+import { tokenName, getCookie } from "@/utils/cookieHandler";
 
 const instance = axios.create({
-	// baseURL: process.env.NEXT_PUBLIC_BASE_URL_USER,
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL_USER || "http://localhost:3006",
 	headers: { "Content-Type": "application/json" },
 });
 
 const onRequest = (config: any) => {
-	const token = getCookie("OUTDOORKA_TOKEN");
+	const token = getCookie(tokenName);
 	if (token) {
 		config.headers.Authorization = `Bearer ${token}`;
 	}
