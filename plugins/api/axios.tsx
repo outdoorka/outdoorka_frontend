@@ -1,5 +1,5 @@
 import instance from "./instance";
-// import activities from "@/api/activity";
+import activities from "@/api/activity";
 import user from "@/api/user";
 import auth from "@/api/auth";
 
@@ -9,11 +9,7 @@ import auth from "@/api/auth";
 // };
 
 export default {
-	// activities: activities(
-	// 	instance,
-	// 	`https://jsonplaceholder.typicode.com/posts`,
-	// ),
-	// activities: activities(instance, "/posts"),
+	activity: activities(instance, "/api/v1/activity"),
 	user: user(instance, "/api/v1/users"),
 	auth: auth(instance, "/api/v1"),
 };
