@@ -25,6 +25,7 @@
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.16",
     "@mui/material-nextjs": "^5.15.11",
+    "@mui/x-date-pickers": "^7.5.0",
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "cookies-next": "^4.1.1",
