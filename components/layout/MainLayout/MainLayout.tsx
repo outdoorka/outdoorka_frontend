@@ -1,8 +1,8 @@
 import React from "react";
-import { 
-	Box, 
+import {
+	Box,
 	Container,
-	// Typography 
+	// Typography
 } from "@mui/material";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
@@ -12,12 +12,12 @@ function MainLayout({ children }: MainLayoutProps) {
 	return (
 		<Box>
 			<Header />
-			<Container 
+			<Container
 				component="main"
 				maxWidth="md"
-				sx={{ 
+				sx={{
 					paddingTop: 12,
-					wordWrap: "break-word"
+					wordWrap: "break-word",
 				}}
 			>
 				{children}
