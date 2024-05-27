@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "@/plugins/api/axios";
+import OrganizerLayout from "@/components/layout/OrganizerLayout/OrganizerLayout";
 
 import * as dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -13,7 +14,6 @@ import {
 	Box,
 	Button,
 	Checkbox,
-	Container,
 	Grid,
 	Stack,
 	TextField,
@@ -175,14 +175,7 @@ function ActivityCreate() {
 	};
 
 	return (
-		<Container
-			component="main"
-			maxWidth="md"
-			sx={{
-				paddingTop: 12,
-				wordWrap: "break-word",
-			}}
-		>
+		<OrganizerLayout>
 			<FormControl>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
@@ -482,7 +475,7 @@ function ActivityCreate() {
 				下一步
 			</Button>
 			<Box>{ogInfo.token?.access_token || "no token"}</Box>
-		</Container>
+		</OrganizerLayout>
 	);
 }
 
