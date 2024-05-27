@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Slider from "react-slick";
-import { Box } from "@mui/material";
+import NextLink from "next/link";
+import { Box, Grid, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import TitleSection from "@/components/layout/home/TitleSection";
 import CardActivity from "@/components/ui/shared/card-activity";
 import Loading from "@/components/ui/loading/loading";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
 import axios from "@/plugins/api/axios";
 import { ActivityState } from "@/types/ActivitiesType";
 
-function NewActivities() {
+function HotActivities() {
 	const { activity } = axios;
+	const theme = useTheme();
 
 	const [activityList, setActivityList] = useState<ActivityState[]>([]);
 	const [error, setError] = useState("");
@@ -20,9 +20,11 @@ function NewActivities() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const responseBody = await activity.getNewActivityList();
-				if (!responseBody || !responseBody.data) return;
-				setActivityList(responseBody.data);
+				const responseBody = await activity.getHotActivityList();
+				if (responseBody && responseBody.data) {
+					const resArray = responseBody.data.slice(0, 8);
+					setActivityList(resArray);
+				}
 			} catch (error) {
 				setError("Failed to fetch data: " + String(error));
 			}
@@ -33,56 +35,20 @@ function NewActivities() {
 	if (error) return <div>Failed to load</div>;
 	if (activityList.length === 0) return <Loading />;
 
-	const SliderSettings = {
-		centerMode: true,
-		infinite: true,
-		variableWidth: true,
-		adaptiveHeight: true,
-		responsive: [
-			{
-				breakpoint: 400,
-				settings: {
-					dots: true,
-				},
-			},
-		],
-	};
-
 	return (
 		<Box
 			sx={{
 				position: "relative",
-				overflow: "hidden",
-				pb: 10,
 				mb: 25,
-				"&::before": {
-					content: "''",
-					position: "absolute",
-					zIndex: -1,
-					left: "5%",
-					width: "90%",
-					maxWidth: "1536px",
-					background:
-						"linear-gradient(180deg, rgba(196, 221, 255, 0.18) 0%, #C4DDFF 100%)",
-					borderRadius: "48px",
-					px: 0,
-					py: 40,
-					pointerEvents: "none",
-				},
 			}}
 		>
-			<TitleSection title="最新活動" />
+			<TitleSection title="熱門活動" />
 
-			<Slider {...SliderSettings}>
-				{activityList.map((value) => (
-					<Box
-						key={value._id}
-						sx={{
-							px: 1.5,
-						}}
-					>
+			<Grid container spacing={2}>
+				{activityList?.map((value) => (
+					<Grid item xs={12} md={3} key={value._id}>
 						<CardActivity
-							type="sm"
+							type="lg"
 							activity={{
 								title: value.subtitle,
 								location: `${value.region} ${value.city}`,
@@ -96,11 +62,27 @@ function NewActivities() {
 								// rating: value.popularity
 							}}
 						/>
-					</Box>
+					</Grid>
 				))}
-			</Slider>
+
+				<Grid item xs={12} textAlign="center" mt={4}>
+					<Button
+						component={NextLink}
+						href="/activities"
+						variant="contained"
+						size="medium"
+						sx={{
+							width: "236px",
+							backgroundColor: theme.palette.primary.main,
+							color: theme.palette.primary.light,
+						}}
+					>
+						載入更多
+					</Button>
+				</Grid>
+			</Grid>
 		</Box>
 	);
 }
 
-export default NewActivities;
+export default HotActivities;

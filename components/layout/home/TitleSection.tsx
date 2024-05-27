@@ -2,7 +2,7 @@
 
 import { Typography } from "@mui/material";
 
-const TitleSection = ({ title }:{title: string}) => {
+const TitleSection = ({ title }: { title: string }) => {
 	return (
 		<Typography
 			component="h2"
@@ -13,11 +13,12 @@ const TitleSection = ({ title }:{title: string}) => {
 				textAlign: "center",
 				letterSpacing: "-0.25px",
 				margin: "48px 0",
+				color: "#00497D",
 			}}
 		>
 			{title}
 		</Typography>
 	);
-}
+};
 
 export default TitleSection;
