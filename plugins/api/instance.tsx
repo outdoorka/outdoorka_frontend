@@ -6,6 +6,10 @@ const onRequest = (tokenCookie: string) => (config: any) => {
 	if (token) {
 		config.headers.Authorization = `Bearer ${token}`;
 	}
+
+	// Wait for 10 seconds before timing out
+	config.timeout = 10000; //
+
 	return config;
 };
 
