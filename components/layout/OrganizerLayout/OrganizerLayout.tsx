@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Box, Container, Grid } from "@mui/material";
 import OgHeader from "@/components/layout/Header/OgHeader";

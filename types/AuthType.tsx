@@ -37,7 +37,7 @@ export interface AuthState {
 export interface ProfileOgItem {
 	_id: string;
 	email: string;
-	username: string;
+	name: string;
 	nickName: string;
 	photo: string;
 	mobile: string;

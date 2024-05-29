@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { loginOrganizer } from "@/features/organizer/ogAuthSlice";
 import { EMAIL_REGEX, PWD_REGEX } from "@/utils/regexHandler";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { removeCookie, getCookie, setCookie } from "@/utils/cookieHandler";
 
 import {
 	Grid,
@@ -113,9 +113,9 @@ export default function Login() {
 				setSuccessMsg('登入成功，即將跳轉至"活動管理"頁面');
 
 				if (remember) {
-					setCookie(OUTDOORKA_OG_ACC_COOKIE, email);
+					setCookie(OUTDOORKA_OG_ACC_COOKIE, email, 1);
 				} else {
-					deleteCookie(OUTDOORKA_OG_ACC_COOKIE);
+					removeCookie(OUTDOORKA_OG_ACC_COOKIE);
 				}
 
 				setTimeout(() => {

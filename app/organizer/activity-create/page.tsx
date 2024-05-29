@@ -1,9 +1,10 @@
 "use client";
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import axios from "@/plugins/api/axios";
 import OrganizerLayout from "@/components/layout/OrganizerLayout/OrganizerLayout";
-
+import { NUMBER_ONLY_REGEX, URL_REGEX } from "@/utils/regexHandler";
 import * as dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -11,11 +12,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import {
 	Autocomplete,
-	Box,
 	Button,
 	Checkbox,
 	Grid,
-	Stack,
 	TextField,
 	Typography,
 	IconButton,
@@ -26,10 +25,13 @@ import {
 	Select,
 	MenuItem,
 	SelectChangeEvent,
+	Box,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { ICreateActivity, RootState } from "@/types";
 import { OgAuthState } from "@/types/AuthType";
@@ -76,6 +78,7 @@ const activitySelectTags = Object.keys(ActivityTag).map((key) => ({
 }));
 
 function ActivityCreate() {
+	const router = useRouter();
 	const { organizer } = axios;
 	const [ogInfo, setOgInfo] = React.useState<OgAuthState>({
 		profile: null,
@@ -84,46 +87,61 @@ function ActivityCreate() {
 	const [activityData, setActivityData] =
 		React.useState<ICreateActivity>(activityInitData);
 	const [tags, setTags] = React.useState<any[]>([]);
+	const [tempLinks, setTempLinks] = React.useState<any[]>(
+		activityData.activityLinks,
+	);
+	const [imageUrls, setImageUrls] = React.useState<string[]>([]);
+	const [formValid, setFormValid] = React.useState<Record<any, string>>({});
+	const hiddenFileInput = useRef<HTMLInputElement>(null);
 
 	// Get ogAuth from redux
 	const ogAuth = useSelector((state: RootState) => state.ogAuth);
 
 	useEffect(() => {
-		if (ogAuth?.profile && ogAuth.token?.access_token) {
+		if (ogAuth?.profile && ogAuth?.profile.name) {
 			setOgInfo({
 				profile: ogAuth.profile,
-				token: ogAuth.token,
+				token: null,
 			});
 		}
-	}, []);
+	}, [ogAuth]);
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		console.log("input change", e.target.name);
+		const { name, value } = e.target;
+
+		// 活動費用只能輸入數字
+		if (name === "price" && !NUMBER_ONLY_REGEX.test(value)) {
+			return;
+		}
+
+		// 活動人數只能輸入數字
+		if (name === "totalCapacity" && !NUMBER_ONLY_REGEX.test(value)) {
+			return;
+		}
 
 		setActivityData((preData) => ({
 			...preData,
-			[e.target.name]: e.target.value,
+			[e.target.name]: value,
 		}));
 	};
 
 	const handleLinkInputChange = (idx: number, targetName: "name" | "url") => {
 		return (event: ChangeEvent<HTMLInputElement>) => {
-			activityData.activityLinks[idx][targetName] = event.target.value;
-			setActivityData((preData) => ({
-				...preData,
-				activityLinks: [...activityData.activityLinks],
-			}));
+			setTempLinks((preData) => {
+				preData[idx][targetName] = event.target.value;
+				return [...preData];
+			});
 		};
 	};
 
 	const handleLinkInputClean = (idx: number) => () => {
-		activityData.activityLinks[idx].name = "";
-		activityData.activityLinks[idx].url = "";
+		tempLinks[idx].name = "";
+		tempLinks[idx].url = "";
 		setActivityData((preData) => ({
 			...preData,
-			activityLinks: [...activityData.activityLinks],
+			...tempLinks,
 		}));
 	};
 
@@ -140,20 +158,115 @@ function ActivityCreate() {
 		}
 	};
 
-	const handleSubmit = async (e: { preventDefault: () => void }) => {
+	const handleDateTimeChange = (name: string) => (newValue: any) => {
+		setActivityData((preData) => ({
+			...preData,
+			[name]: newValue,
+		}));
+	};
+
+	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+		if (!event.target?.files || imageUrls.length >= 5) {
+			return;
+		}
+
+		if (event.target.files[0]) {
+			const getFile = event.target.files[0];
+			const maxSize = 1024 * 1024 * 2; // 2 MB
+
+			if (getFile.size > maxSize) {
+				console.error("Image size cannot exceed 2 MB");
+				return;
+			}
+
+			// Validate file type
+			const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+			if (!allowedTypes.includes(getFile.type)) {
+				console.error("只允許 JPG, PNG, and GIF images are allowed");
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append("image", event.target.files[0]);
+
+			organizer
+				.imageUpload(formData)
+				.then((res: any) => {
+					if (res.data?.url) {
+						setImageUrls((preImageUrls) => [...preImageUrls, res.data.url]);
+					}
+				})
+				.catch((err: any) => {
+					console.error("imageUpload", err);
+				});
+		} else {
+			console.error("No file selected");
+		}
+	};
+
+	const handleTempImageDelete = (index: number) => () => {
+		const newImageUrls = imageUrls.filter((_, i) => i !== index);
+		setImageUrls(newImageUrls);
+	};
+
+	const handleSubmit = (isPublish: boolean) => (e: any) => {
 		e.preventDefault();
 		console.log("submit", activityData);
 
+		setFormValid({});
 		activityData.activityTags = tags.map((tag) => tag.value);
 		activityData.price = Number(activityData.price);
 		activityData.totalCapacity = Number(activityData.totalCapacity);
-		activityData.activityImageUrls = ["https://picsum.photos/800/600"];
-		activityData.isPublish = true;
+		activityData.activityLinks = tempLinks.filter(
+			(link) => link.name && URL_REGEX.test(link.url),
+		);
+		activityData.activityImageUrls = imageUrls.filter((url) =>
+			URL_REGEX.test(url),
+		);
+
+		activityData.isPublish = isPublish;
+
+		let isValid = false;
+
+		for (const key in activityData) {
+			if (key === "activityImageUrls") {
+				continue;
+			}
+
+			if (key === "activityTags" && activityData.activityTags.length === 0) {
+				isValid = true;
+				setFormValid((prev) => ({
+					...prev,
+					activityTags: "請選擇活動標籤",
+				}));
+				continue;
+			}
+
+			if (
+				activityData[key as keyof ICreateActivity] === "" ||
+				activityData[key as keyof ICreateActivity] === 0
+			) {
+				isValid = true;
+				setFormValid((prev) => ({
+					...prev,
+					[key]: "請確認此欄位內容",
+				}));
+			}
+		}
+
+		// console.log("activityData", activityData);
+		// console.log("formValid", isValid);
+		if (isValid) {
+			return;
+		}
 
 		organizer
 			.createActivity(activityData)
 			.then((res: any) => {
 				console.log("createActivity", res);
+				setTimeout(() => {
+					router.push("/organizer/activity-list");
+				}, 100);
 			})
 			.catch((err: any) => {
 				console.log("createActivity", err);
@@ -185,7 +298,7 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							value={"舉辦方名稱"}
+							value={ogInfo?.profile?.name || ""}
 						/>
 					</Grid>
 
@@ -197,8 +310,8 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.title ? true : false}
+							helperText={formValid.title}
 							InputLabelProps={{ shrink: true }}
 							inputProps={{ maxLength: 100 }}
 							onChange={handleInputChange}
@@ -214,8 +327,8 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.subtitle ? true : false}
+							helperText={formValid.subtitle}
 							InputLabelProps={{ shrink: true }}
 							inputProps={{ maxLength: 100 }}
 							onChange={handleInputChange}
@@ -231,8 +344,8 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.price ? true : false}
+							helperText={formValid.price}
 							InputLabelProps={{ shrink: true }}
 							onChange={handleInputChange}
 							value={activityData.price}
@@ -240,28 +353,27 @@ function ActivityCreate() {
 					</Grid>
 
 					<Grid item xs={12}>
-						<Typography mt={0}>Tags</Typography>
-						<Stack spacing={3} sx={{ width: 500 }}>
-							<Autocomplete
-								multiple
-								id="tags-standard"
-								fullWidth
-								options={activitySelectTags}
-								disableCloseOnSelect
-								getOptionLabel={(option) => option.title}
-								value={tags}
-								onChange={handleSelectTagChange}
-								renderOption={renderSelectOption}
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										variant="standard"
-										label="活動標籤"
-										InputLabelProps={{ shrink: true }}
-									/>
-								)}
-							/>
-						</Stack>
+						{/* <Typography mt={0}>Tags</Typography> */}
+						<Autocomplete
+							multiple
+							disableCloseOnSelect
+							id="tags-standard"
+							fullWidth
+							options={activitySelectTags}
+							getOptionLabel={(option) => option.title}
+							value={tags}
+							onChange={handleSelectTagChange}
+							renderOption={renderSelectOption}
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									label="活動標籤"
+									InputLabelProps={{ shrink: true }}
+									error={formValid.activityTags ? true : false}
+									helperText={formValid.activityTags}
+								/>
+							)}
+						/>
 					</Grid>
 
 					<Grid item xs={12}>
@@ -272,8 +384,8 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.totalCapacity ? true : false}
+							helperText={formValid.totalCapacity}
 							InputLabelProps={{ shrink: true }}
 							onChange={handleInputChange}
 							value={activityData.totalCapacity}
@@ -281,6 +393,9 @@ function ActivityCreate() {
 					</Grid>
 
 					<Grid item xs={12}>
+						<Typography variant="h6" mt={1} mb={1}>
+							活動地點
+						</Typography>
 						<FormControl sx={{ width: "50%" }}>
 							<InputLabel id="city-select-label">City</InputLabel>
 							<Select
@@ -306,9 +421,10 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.address ? true : false}
+							helperText={formValid.address}
 							InputLabelProps={{ shrink: true }}
+							inputProps={{ maxLength: 100 }}
 							onChange={handleInputChange}
 							value={activityData.address}
 						/>
@@ -322,70 +438,81 @@ function ActivityCreate() {
 							variant="outlined"
 							margin="normal"
 							multiline
-							rows={5}
+							rows={3}
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.location ? true : false}
+							helperText={formValid.location}
 							InputLabelProps={{ shrink: true }}
+							inputProps={{ maxLength: 100 }}
 							onChange={handleInputChange}
 							value={activityData.location}
 						/>
 					</Grid>
 
 					<Grid item xs={12}>
-						<Typography mt={0}>活動時間</Typography>
+						<Typography variant="h6" mt={1} mb={1}>
+							活動時間
+						</Typography>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DemoContainer components={["DateTimePicker"]}>
 								<DateTimePicker
 									label="活動開始時間"
 									value={activityData.activityStartTime}
-									onChange={(newValue) => console.log("活動開始時間", newValue)}
+									name="activityStartTime"
+									onChange={handleDateTimeChange("activityStartTime")}
 								/>
 							</DemoContainer>
 						</LocalizationProvider>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
-							<DemoContainer components={["DateTimePicker"]}>
+							<DemoContainer
+								components={["DateTimePicker"]}
+								sx={{ marginTop: "6px" }}
+							>
 								<DateTimePicker
 									label="活動結束時間"
 									value={activityData.activityEndTime}
-									onChange={(newValue) => console.log("活動結束時間", newValue)}
+									onChange={handleDateTimeChange("activityEndTime")}
 								/>
 							</DemoContainer>
 						</LocalizationProvider>
 					</Grid>
 
 					<Grid item xs={12}>
-						<Typography mt={0}>活動報名時間</Typography>
+						<Typography variant="h6" mt={0}>
+							活動報名時間
+						</Typography>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DemoContainer components={["DateTimePicker"]}>
 								<DateTimePicker
 									label="活動報名起始日"
 									value={activityData.activitySignupStartTime}
-									onChange={(newValue) =>
-										console.log("活動報名起始日", newValue)
-									}
+									onChange={handleDateTimeChange("activitySignupStartTime")}
 								/>
 							</DemoContainer>
 						</LocalizationProvider>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
-							<DemoContainer components={["DateTimePicker"]}>
+							<DemoContainer
+								components={["DateTimePicker"]}
+								sx={{ marginTop: "6px" }}
+							>
 								<DateTimePicker
 									label="活動報名截止日"
 									value={activityData.activitySignupEndTime}
-									onChange={(newValue) =>
-										console.log("活動報名截止日", newValue)
-									}
+									onChange={handleDateTimeChange("activitySignupEndTime")}
 								/>
 							</DemoContainer>
 						</LocalizationProvider>
 					</Grid>
 
 					<Grid item xs={12}>
-						<Typography mt={0}>相關連結</Typography>
+						<Typography variant="h6" mt={0}>
+							相關連結
+						</Typography>
 						<List>
-							{activityData.activityLinks.map((link, index) => (
+							{tempLinks.map((link, index) => (
 								<ListItem
 									key={`activityLink-${index}`}
+									sx={{ padding: 0 }}
 									secondaryAction={
 										<IconButton
 											edge="end"
@@ -403,7 +530,7 @@ function ActivityCreate() {
 										variant="outlined"
 										margin="normal"
 										InputLabelProps={{ shrink: true }}
-										sx={{ width: "35%" }}
+										sx={{ width: "35%", marginRight: "10px" }}
 										onChange={handleLinkInputChange(index, "name")}
 										value={link.name}
 									/>
@@ -432,8 +559,8 @@ function ActivityCreate() {
 							multiline
 							rows={5}
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.activityDetail ? true : false}
+							helperText={formValid.activityDetail}
 							InputLabelProps={{ shrink: true }}
 							onChange={handleInputChange}
 							value={activityData.activityDetail}
@@ -449,32 +576,101 @@ function ActivityCreate() {
 							multiline
 							rows={5}
 							fullWidth
-							error={true}
-							helperText={"Error phone"}
+							error={formValid.activityNotice ? true : false}
+							helperText={formValid.activityNotice}
 							InputLabelProps={{ shrink: true }}
 							onChange={handleInputChange}
 							value={activityData.activityNotice}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography mt={0}>上傳圖片 1/ 5</Typography>
-					</Grid>
 
+					<Grid item xs={12} mt={3} mb={3}>
+						<Grid container spacing={3} alignItems="center">
+							<Grid xs={2} sx={{ marginBottom: "16px" }}>
+								<Typography mt={0}>上傳圖片 {imageUrls.length} / 5</Typography>
+							</Grid>
+							<Grid xs={1} sx={{ marginBottom: "16px" }}>
+								<IconButton
+									color="success"
+									aria-label="add image"
+									size="large"
+									onClick={() => hiddenFileInput.current!.click()}
+									disabled={imageUrls.length >= 5}
+								>
+									<AddCircleOutlineIcon fontSize="large" />
+								</IconButton>
+							</Grid>
+						</Grid>
+
+						<Grid container spacing={2}>
+							{imageUrls.map((url, index) => (
+								<Grid key={url} xs={4} sx={{ marginBottom: "16px" }}>
+									<Box sx={{ position: "relative" }}>
+										<IconButton
+											color="warning"
+											aria-label="add image"
+											size="large"
+											onClick={handleTempImageDelete(index)}
+											sx={{
+												position: "absolute",
+												top: "0",
+												right: "12px",
+											}}
+										>
+											<DeleteForeverIcon fontSize="large" />
+										</IconButton>
+										<Box
+											component="img"
+											src={url}
+											alt="activity image"
+											loading="lazy"
+											sx={{ width: "95%" }}
+										/>
+									</Box>
+								</Grid>
+							))}
+						</Grid>
+
+						<input
+							type="file"
+							hidden
+							ref={hiddenFileInput}
+							style={{ display: "none" }}
+							onChange={handleImageUpload}
+						/>
+					</Grid>
+				</Grid>
+			</FormControl>
+
+			{/* <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+				下一步
+			</Button> */}
+			<Grid container spacing={5} justifyContent="flex-end" mt={5} mb={5}>
+				<Grid xs={3}>
 					<Button
 						type="submit"
+						sx={{ width: "96%", mr: 2 }}
 						variant="contained"
+						color="primary"
 						size="large"
-						onClick={handleSubmit}
+						onClick={handleSubmit(false)}
+					>
+						儲存草稿
+					</Button>
+				</Grid>
+				<Grid xs={3}>
+					<Button
+						type="submit"
+						sx={{ width: "96%", mr: 2 }}
+						variant="contained"
+						color="success"
+						size="large"
+						onClick={handleSubmit(true)}
 					>
 						建立活動
 					</Button>
 				</Grid>
-			</FormControl>
-
-			<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-				下一步
-			</Button>
-			<Box>{ogInfo.token?.access_token || "no token"}</Box>
+			</Grid>
 		</OrganizerLayout>
 	);
 }
