@@ -309,6 +309,7 @@ function ActivityCreate() {
 						router.push("/organizer/activity-list");
 					}, 200);
 				} else {
+					console.log("res.error", res);
 					if (res.error) {
 						try {
 							const error = JSON.parse(res.error);
@@ -318,7 +319,9 @@ function ActivityCreate() {
 									.join("\n");
 							}
 						} catch (error) {
-							console.error("parse error", error);
+							if (typeof res.error === "string") {
+								errorMessages = res.error;
+							}
 						}
 					}
 
