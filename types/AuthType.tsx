@@ -6,6 +6,15 @@ export interface RegisterForm {
 	mobile: string;
 }
 
+export interface RegisterOgForm {
+	email: string;
+	name: string;
+	nickName: string;
+	mobile: string;
+	password: string;
+	confirm?: string;
+}
+
 export interface LoginForm {
 	account: string;
 	password: string;
@@ -21,14 +30,14 @@ export interface ProfileItem {
 	name: string;
 }
 export interface AuthState {
-	token: AuthItem | null;
 	profile: ProfileItem | null;
+	error: string | null;
 }
 
 export interface ProfileOgItem {
 	_id: string;
 	email: string;
-	username: string;
+	name: string;
 	nickName: string;
 	photo: string;
 	mobile: string;
@@ -37,6 +46,7 @@ export interface ProfileOgItem {
 export interface LoginOrganizerForm {
 	email: string;
 	password: string;
+	remember?: boolean;
 }
 
 export interface OgAuthState {

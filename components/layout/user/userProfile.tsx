@@ -109,7 +109,7 @@ export default function UserProfile({ userData }: Props) {
 						</Grid>
 						<Grid item xs={12}>
 							<FormControl fullWidth>
-								<InputLabel id="gender-label">Age</InputLabel>
+								<InputLabel id="gender-label">性別</InputLabel>
 								<Select
 									labelId="gender-label"
 									id="gender"
@@ -117,6 +117,7 @@ export default function UserProfile({ userData }: Props) {
 									label="gender"
 									onChange={handleSelectChange}
 								>
+									<MenuItem value={""}>不公開</MenuItem>
 									<MenuItem value={"male"}>生理男</MenuItem>
 									<MenuItem value={"female"}>生理女</MenuItem>
 								</Select>
