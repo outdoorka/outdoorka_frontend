@@ -6,6 +6,8 @@ import axios from "@/plugins/api/axios";
 import OrganizerLayout from "@/components/layout/OrganizerLayout/OrganizerLayout";
 import { NUMBER_ONLY_REGEX, URL_REGEX } from "@/utils/regexHandler";
 import * as dayjs from "dayjs";
+import { getFirebaseFileName } from "@/utils/common";
+
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -234,6 +236,12 @@ function ActivityCreate() {
 	};
 
 	const handleTempImageDelete = (index: number) => () => {
+		// Delete image from firebase
+		const fileNam = getFirebaseFileName(imageUrls[index]);
+		organizer.imageDelete(fileNam).then((res: any) => {
+			console.log("imageDelete", res);
+		});
+
 		const newImageUrls = imageUrls.filter((_, i) => i !== index);
 		setImageUrls(newImageUrls);
 	};
