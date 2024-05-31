@@ -3,6 +3,7 @@
 import React from "react";
 import Slider from "react-slick";
 import HomeOrganizerCard from "./card/homeOrganizerCard";
+import TitleSection from "@/components/layout/home/TitleSection";
 
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,8 +16,10 @@ function HomeOrganizerCarousel() {
 	return (
 		<Box
 			className="slider-container"
-			sx={{ marginX: "100px", position: "relative", maxWidth: "1536px" }}
+			sx={{ position: "relative" }}
 		>
+			<TitleSection title="優質主揪" />
+
 			<Slider {...settings}>
 				{testData.map((el, i) => (
 					<HomeOrganizerCard key={i} {...el} />

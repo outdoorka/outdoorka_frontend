@@ -240,6 +240,10 @@ function Header() {
 									<Button color="inherit" href="/register">
 										註冊
 									</Button>
+									｜
+									<Button color="inherit" href="/organizer/login">
+										主揪登入
+									</Button>
 								</Box>
 							) : (
 								<>

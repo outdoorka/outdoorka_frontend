@@ -9,10 +9,10 @@ const TitleSection = ({ title }: { title: string }) => {
 			sx={{
 				fontSize: "56px",
 				fontWeight: "700",
-				lineHeight: "64px",
+				mt: "80px",
+				mb: "64px",
 				textAlign: "center",
 				letterSpacing: "-0.25px",
-				margin: "48px 0",
 				color: "#00497D",
 			}}
 		>
