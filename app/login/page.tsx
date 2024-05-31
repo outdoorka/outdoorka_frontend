@@ -1,13 +1,17 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { loginUser } from "@/features/user/authSlice";
-import NextLink from "next/link";
+import { ChangeEvent, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import NextLink from "next/link";
+
+import { RootState } from "@/types";
+import { LoginForm } from "@/types/AuthType";
+import { loginUser } from "@/features/user/authSlice";
+import { EMAIL_REGEX, PWD_REGEX } from "@/utils/regexHandler";
 
 import {
-	Grid,
+	Unstable_Grid2 as Grid,
 	Box,
 	Typography,
 	FormGroup,
@@ -18,50 +22,58 @@ import {
 	Link as MuiLink,
 	Alert,
 } from "@mui/material";
-import { LoginForm } from "@/types/AuthType";
 
 export default function Login() {
 	const router = useRouter();
 	const dispatch = useDispatch();
-	// const token = useSelector((state:any) => state.auth.token);
 
-	const [loginForm, setLoginForm] = useState<LoginForm>({
+	const { profile: authUser } = useSelector((x: RootState) => x.auth);
+	useEffect(() => {
+		if (authUser) {
+			router.push("/");
+		}
+	}, [authUser, router]);
+
+	const [errorMsg, setErrorMsg] = useState("");
+	const [successMsg, setSuccessMsg] = useState("");
+	const displayName: Record<keyof LoginForm, string> = {
+		account: "帳號",
+		password: "密碼",
+	};
+	const [loginField, setLoginField] = useState<LoginForm>({
 		account: "",
 		password: "",
 	});
-	const [errorMsg, setErrorMsg] = useState("");
-	const [successMsg, setSuccessMsg] = useState("");
-	const [validAccount, setValidAccount] = useState("");
-	const [validPwd, setValidPwd] = useState("");
-
-	const EMAIL_REGEX = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/; // eslint-disable-line
-	const PWD_REGEX = /^[0-9a-zA-Z]{8,24}$/; // eslint-disable-line
+	const [loginValid, setLoginValid] = useState<LoginForm>({
+		account: "",
+		password: "",
+	});
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		e.preventDefault();
 		const { name, value } = e.target;
-		if (name === "account") {
+
+		if (name in displayName) {
+			const fieldName = name as keyof LoginForm;
+			const displayStr = displayName[fieldName];
+			let errorMessage = "";
 			if (value === "") {
-				setValidAccount("請輸入帳號");
-			} else if (!EMAIL_REGEX.test(value)) {
-				setValidAccount("請輸入Email格式");
-			} else {
-				setValidAccount("");
+				errorMessage = `請輸入${displayStr}`;
+			} else if (fieldName === "account" && !EMAIL_REGEX.test(value)) {
+				errorMessage = "請輸入Email格式";
+			} else if (fieldName === "password" && !PWD_REGEX.test(value)) {
+				errorMessage = "請確認正確密碼格式，規則為大小寫英數字並且至少八碼";
 			}
-		}
-		if (name === "password") {
-			if (value === "") {
-				setValidPwd("請輸入密碼");
-			} else if (!PWD_REGEX.test(value)) {
-				setValidPwd("請確認正確密碼格式，規則為大小寫英數字並且至少八碼");
-			} else {
-				setValidPwd("");
-			}
+
+			setLoginValid((prevValid) => ({
+				...prevValid,
+				[fieldName]: errorMessage,
+			}));
 		}
 
-		setLoginForm((prevForm) => ({
+		setLoginField((prevForm) => ({
 			...prevForm,
 			[name]: value,
 		}));
@@ -69,17 +81,18 @@ export default function Login() {
 
 	const handleSubmit = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		const { account, password } = loginForm;
-
+		const { account, password } = loginField;
 		if (!EMAIL_REGEX.test(account) || !PWD_REGEX.test(password)) return;
+
 		setErrorMsg("");
 		setSuccessMsg("");
-		dispatch(loginUser(loginForm)).then((res: any) => {
+		dispatch(loginUser(loginField)).then((res: any) => {
 			if (res.payload.data) {
 				setSuccessMsg(res.payload.message);
+				// 2秒後跳轉到首頁
 				setTimeout(() => {
-					router.push("/");
-				}, 2000); // 2秒後跳轉到首頁
+					router.replace("/");
+				}, 2000);
 			} else if (res.payload.error) {
 				setErrorMsg(res.payload.error);
 			}
@@ -95,7 +108,6 @@ export default function Login() {
 			spacing={2}
 		>
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{
@@ -106,8 +118,6 @@ export default function Login() {
 					component="img"
 					sx={{
 						objectFit: "cover",
-					}}
-					style={{
 						height: "100dvh",
 					}}
 					display={{ xs: "none", md: "block" }}
@@ -117,7 +127,6 @@ export default function Login() {
 			</Grid>
 
 			<Grid
-				item
 				xs={12}
 				md={6}
 				sx={{
@@ -131,7 +140,6 @@ export default function Login() {
 					}}
 				>
 					<Box component="form" noValidate autoComplete="off">
-						{/* {token} */}
 						<Box
 							component="img"
 							sx={{
@@ -148,25 +156,29 @@ export default function Login() {
 								required
 								name="account"
 								type="email"
-								value={loginForm.account}
+								value={loginField.account}
 								label="帳號"
 								margin="normal"
-								error={validAccount !== ""}
-								helperText={validAccount}
+								error={loginValid.account !== ""}
+								helperText={loginValid.account}
 								InputLabelProps={{ shrink: true }}
-								onChange={(event) => handleInputChange(event)}
+								onChange={(
+									event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+								) => handleInputChange(event)}
 							/>
 							<TextField
 								required
 								name="password"
-								value={loginForm.password}
+								value={loginField.password}
 								label="密碼"
 								margin="normal"
 								type="password"
-								error={validPwd !== ""}
-								helperText={validPwd}
+								error={loginValid.password !== ""}
+								helperText={loginValid.password}
 								InputLabelProps={{ shrink: true }}
-								onChange={(event) => handleInputChange(event)}
+								onChange={(
+									event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+								) => handleInputChange(event)}
 							/>
 							<Button
 								variant="contained"
@@ -176,7 +188,9 @@ export default function Login() {
 									marginBottom: 1,
 								}}
 								onClick={handleSubmit}
-								disabled={validAccount !== "" || validPwd !== ""}
+								disabled={
+									loginValid.account !== "" || loginValid.password !== ""
+								}
 							>
 								登入
 							</Button>
