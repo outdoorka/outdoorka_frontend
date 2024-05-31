@@ -5,6 +5,10 @@ import HotActivities from "@/components/layout/home/HotActivities";
 import NewActivities from "@/components/layout/home/NewActivities";
 import { Box, Unstable_Grid2 as Grid } from "@mui/material";
 
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
+
 function Home() {
 	return (
 		<MainLayout>
