@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
+
 import initializeStore from "@/features/index";
 
 import "@/styles/globals.css";
+import "@/styles/customStyles.css";
 import { lightTheme } from "@/styles/theme";
 
 import Cookies from "js-cookie";

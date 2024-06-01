@@ -14,7 +14,7 @@ function MainLayout({ children }: MainLayoutProps) {
 			<Header />
 			<Container
 				component="main"
-				maxWidth="md"
+				maxWidth="XL"
 				sx={{
 					paddingTop: 12,
 					wordWrap: "break-word",

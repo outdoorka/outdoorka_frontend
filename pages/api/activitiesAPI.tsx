@@ -1,8 +1,7 @@
 import axios from "@/plugins/api/axios";
-
-const { activities } = axios;
+const { activity } = axios;
 
 export const fetchActivitiesData: any = async () => {
-	const response = await activities.getActivityList();
+	const response = await activity.getActivityList();
 	return response;
 };
