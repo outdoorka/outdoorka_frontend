@@ -8,14 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfileCookieObj } from "@/utils/cookieHandler";
 import { RootState } from "@/types";
 import { logoutUser, setProfile } from "@/features/user/authSlice";
-import MenuIcon from "@mui/icons-material/Menu";
 
 import {
 	AppBar,
 	Box,
+	Container,
 	List,
 	ListItem,
-	Typography,
 	Drawer,
 	Link,
 	Avatar,
@@ -23,11 +22,14 @@ import {
 	Badge,
 	Button,
 	Toolbar,
+	Typography,
 	Menu,
 	MenuItem,
 	ClickAwayListener,
 	useScrollTrigger,
 } from "@mui/material";
+
+import MenuIcon from "@mui/icons-material/Menu";
 
 import LogoHeader1 from "@/public/images/logoHeader_1.svg";
 import LogoHeader2 from "@/public/images/logoHeader_2.svg";
@@ -43,31 +45,21 @@ const linkTitles = [
 ];
 
 function Header() {
-	const dispatch = useDispatch();
-	const router = useRouter();
-	const { profile } = useSelector((x: RootState) => x.auth);
-	const userProfile = getProfileCookieObj();
-
 	const [isClient, setIsClient] = useState(false);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 	const [container, setContainer] = useState<HTMLElement | undefined>(
 		undefined,
 	);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const open = Boolean(anchorEl);
-
-	const drawerWidth = 240;
+	const { profile } = useSelector((x: RootState) => x.auth);
+	const dispatch = useDispatch();
+	const router = useRouter();
+	const userProfile = getProfileCookieObj();
 	const scrollDownFlag = useScrollTrigger();
-
-	useEffect(() => {
-		setIsClient(true);
-		if (!profile && userProfile) {
-			dispatch(setProfile(userProfile));
-		}
-		setContainer(
-			typeof window !== "undefined" ? window.document.body : undefined,
-		);
-	}, []);
+	const drawerWidth = 240;
 
 	const handleProfileMenuClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -144,6 +136,17 @@ function Header() {
 			<MenuItem onClick={handleLogout}>登出</MenuItem>
 		</Box>
 	);
+
+	useEffect(() => {
+		setIsClient(true);
+		if (!profile && userProfile) {
+			dispatch(setProfile(userProfile));
+		}
+		setContainer(
+			typeof window !== "undefined" ? window.document.body : undefined,
+		);
+	}, []);
+
 	return (
 		<Box sx={{ display: "flex" }}>
 			<AppBar
@@ -277,7 +280,6 @@ function Header() {
 												CIAO! <b>{profile.name}</b>
 											</Typography>
 										</IconButton>
-
 										<IconButton color="inherit" sx={{ mr: 1 }}>
 											<Badge badgeContent={4} color="secondary">
 												<Image

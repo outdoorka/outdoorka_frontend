@@ -1,5 +1,9 @@
 import React from "react";
-import { Box } from "@mui/material";
+import {
+	Box,
+	Container,
+	// Typography
+} from "@mui/material";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
 import { MainLayoutProps } from "@/types/index";
@@ -8,15 +12,16 @@ function MainLayout({ children }: MainLayoutProps) {
 	return (
 		<Box>
 			<Header />
-			<Box
+			<Container
 				component="main"
+				maxWidth="XL"
 				sx={{
-					paddingTop: 10,
+					paddingTop: 12,
 					wordWrap: "break-word",
 				}}
 			>
 				{children}
-			</Box>
+			</Container>
 			<Footer />
 		</Box>
 	);
