@@ -30,11 +30,11 @@ export default function RootLayout({
 	);
 
 	useEffect(() => {
-		const token = Cookies.get("OUTDOORKA_TOKEN");
-		if (!token) {
-			router.push("/");
-			return;
-		}
+		// const token = Cookies.get("OUTDOORKA_TOKEN");
+		// if (!token) {
+		// 	router.push("/");
+		// 	return;
+		// }
 	}, [router]);
 
 	return (
