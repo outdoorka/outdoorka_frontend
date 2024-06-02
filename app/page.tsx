@@ -15,17 +15,13 @@ function Home() {
 		<MainLayout>
 			<Grid container justifyContent="center">
 				<Grid xs={12}>
-					<Box sx={{ height: "80vh", backgroundColor: "#F8F9FF" }}>banner</Box>
+					<Box sx={{ height: "1010px" }}>banner</Box>
+				</Grid>
+				<Grid sx={{ maxWidth: {sm: "850px", md: "1280px", lg: "1536px"} }}>
+					<HotActivities />
 				</Grid>
 				<Grid xs={12}>
-					<Box sx={{ height: "100vh", backgroundColor: "#F8F9FF" }}>
-						熱門活動
-					</Box>
-				</Grid>
-				<Grid xs={12}>
-					<Box sx={{ height: "50vh", backgroundColor: "#F8F9FF" }}>
-						最新活動
-					</Box>
+					<NewActivities />
 				</Grid>
 				<Grid xs={10}>
 					<Box py={10}>
@@ -123,21 +119,6 @@ function Home() {
 								</Link>
 							</Box>
 						</Box>
-					</Box>
-				</Grid>
-				<Grid xs={12}>
-					<Box sx={{ height: 400, backgroundColor: "#F8F9FF" }}>優質主揪</Box>
-					首頁Banner幻燈片
-				</Grid>
-				<Grid xs={12} sx={{ maxWidth: "1536px" }}>
-					<HotActivities />
-				</Grid>
-				<Grid xs={12}>
-					<NewActivities />
-				</Grid>
-				<Grid xs={10} sx={{ maxWidth: "1536px", mb: "200px" }}>
-					<Box sx={{ height: "80vh", backgroundColor: "#F8F9FF" }}>
-						活動探索
 					</Box>
 				</Grid>
 				<Grid xs={12} sx={{ maxWidth: "1536px", mb: "200px" }}>
