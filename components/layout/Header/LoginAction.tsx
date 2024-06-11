@@ -41,6 +41,7 @@ function LoginAction() {
 		if (!profile && userProfile) {
 			dispatch(setProfile(userProfile));
 		}
+		// TODO 部分頁面無登入必須轉到首頁
 	}, []);
 
 	const handleProfileMenuClick = (event: MouseEvent<HTMLElement>) => {
@@ -55,11 +56,17 @@ function LoginAction() {
 	const handleLogout = () => {
 		handleProfileMenuClose(new Event("logout"));
 		dispatch(logoutUser());
+		router.push("/");
 	};
 
 	const handleProfile = () => {
 		handleProfileMenuClose(new Event("navigate"));
 		router.push("/user/profile/");
+	};
+
+	const goToTicket = () => {
+		handleProfileMenuClose(new Event("ticket"));
+		router.push("/ticket");
 	};
 
 	const profileMenu = (
@@ -83,7 +90,7 @@ function LoginAction() {
 			</Box>
 			<MenuItem onClick={handleProfile}>管理帳號</MenuItem>
 			<MenuItem onClick={handleProfileMenuClose}>我的收藏</MenuItem>
-			<MenuItem onClick={handleProfileMenuClose}>我的票卷</MenuItem>
+			<MenuItem onClick={goToTicket}>我的票卷</MenuItem>
 			<MenuItem onClick={handleLogout}>登出</MenuItem>
 		</Box>
 	);
