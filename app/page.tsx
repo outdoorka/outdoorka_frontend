@@ -17,7 +17,7 @@ function Home() {
 				<Grid xs={12}>
 					<Box sx={{ height: "1010px" }}></Box>
 				</Grid>
-				<Grid sx={{ maxWidth: {sm: "850px", md: "1280px", lg: "1536px"} }}>
+				<Grid sx={{ maxWidth: { sm: "850px", md: "1280px", lg: "1536px" } }}>
 					<HotActivities />
 				</Grid>
 				<Grid xs={12}>
@@ -121,7 +121,19 @@ function Home() {
 						</Box>
 					</Box>
 				</Grid>
-				<Grid xs={12} sx={{ maxWidth: "1536px", mb: "200px" }}>
+				<Grid
+					xs={12}
+					sx={{
+						maxWidth: {
+							xl: "1536px",
+							lg: "1160px",
+							md: "1160px",
+							sm: "800px",
+							xs: "280px",
+						},
+						mb: "200px",
+					}}
+				>
 					<HomeOrganizerCarousel />
 				</Grid>
 			</Grid>
