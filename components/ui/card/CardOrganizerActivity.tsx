@@ -144,7 +144,7 @@ function CardOrganizerActivity({ isFinish, isPublish, activity }: CardActivityPr
 					<CalendarTodayIcon sx={{ mr: 1 }} color="action" />
 					<span>{parseDate(activity?.activityStartTime, activity?.activityEndTime)}</span>
 				</Box>
-				<Typography variant="h6" sx={{mt: 2, fontWeight: "700"}}>
+				<Typography variant="h6" sx={{mt: 2, fontWeight: "700"}} className="multiline-ellipsis">
 					{activity.title}
 				</Typography>
 			</Box>

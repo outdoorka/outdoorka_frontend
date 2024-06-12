@@ -17,6 +17,11 @@ export interface IActivityLink {
 	url: string;
 }
 
+export interface IGetActivity {
+	status: number;
+	sort?: string;
+}
+
 export interface ICreateActivity {
 	title: string;
 	subtitle: string;
