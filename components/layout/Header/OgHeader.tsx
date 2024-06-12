@@ -32,10 +32,9 @@ function OgHeader() {
 		const getOgToken = getCookie("OUTDOORKA_OG_TOKEN");
 		if (getOgToken) {
 			dispatch(getOrganizer() as any).then((res: any) => {
-				console.log(res);
-				if (res.payload.data) {
+				if (res.payload?.data) {
 					// setProfile(res.payload.data);
-				} else if (res.payload.error) {
+				} else if (res.error.message) {
 					router.push("/organizer/login");
 				}
 			});
