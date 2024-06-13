@@ -127,13 +127,10 @@ function Ticket() {
 							alignItems: "center",
 							justifyContent: "center",
 							margin: { xs: "0 auto 8px auto", sm: "auto" },
-							p:1
+							p: 1,
 						}}
 					>
-						<QRCodeSVG 
-							value={ticketData._id} 
-							size={270}
-						/>
+						<QRCodeSVG value={ticketData._id} size={270} />
 					</Box>
 					<Box
 						sx={{

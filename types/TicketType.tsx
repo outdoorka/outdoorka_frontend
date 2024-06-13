@@ -4,17 +4,27 @@ export interface OrganizerState {
 	photo: string;
 	rating: number;
 }
+
+export interface TicketsState {
+	ticketId: string;
+	ticketStatus: number;
+	ticketOwnerId?: string;
+}
 export interface TicketState {
 	_id: string;
-	ticketStatus: number;
-	organizer: OrganizerState;
-	subtitle: string;
+	title: string;
+	status: number;
 	region: string;
 	city: string;
-	activityImageUrls: string[];
+	activityImageUrl: string;
 	activityStartTime: string;
 	activityEndTime: string;
+	likers: number;
+	ticketCount: number;
+	tickets: TicketsState[];
 	bookedCapacity: number;
+	totalCapacity?: number;
+	organizer?: OrganizerState;
 }
 
 type TicketProp = {
@@ -23,14 +33,13 @@ type TicketProp = {
 	startTime: string;
 	endTime: string;
 	photo: string;
-	avatar: string;
-	name: string;
-	rating: number;
 	capacity: number;
 	status: number;
+	ticketCount: number;
+	tickets: TicketsState[];
 };
 
 export interface CardTicketProps {
 	type?: "sm" | "lg";
-	tickets: TicketProp;
+	ticketItem: TicketProp;
 }

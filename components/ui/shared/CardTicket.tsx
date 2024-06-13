@@ -4,23 +4,31 @@ import React from "react";
 import {
 	Box,
 	Typography,
-	Avatar,
 	Grid,
 	Paper,
 	CardMedia,
 	Chip,
 } from "@mui/material";
+
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LocationIcon from "@/components/icon/locationIcon";
 import PeopleIcon from "@/components/icon/peopleIcon";
-import RatingStars from "./RatingStar";
 import { CardTicketProps } from "@/types/TicketType";
 import { parseDate } from "@/utils/dateHandler";
 
-function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
+function CardTicket({ ticketItem, type = "sm" }: CardTicketProps) {
+	const ticketCountInfo = () => {
+		const ticketAssignCount = ticketItem.tickets.filter(item => item && item.hasOwnProperty('ticketOwnerId') && item.ticketOwnerId !== "" )
+		if(ticketAssignCount.length === ticketItem.ticketCount){
+			return "分票完畢"
+		}else{
+			return `待分票 ${ticketAssignCount.length}/${ticketItem.ticketCount}`
+		}
+	}
 	const ChipStyle = {
-		px:0,
-		py:2,
+		px: 0,
+		py: 2,
+		width: "120px",
 		borderRadius: "36px",
 		border: "1px solid #FFFFFFCC",
 		backdropFilter: "invert(25%)",
@@ -36,6 +44,8 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 	};
 	const infoIconTextStyle = {
 		display: "inline-block",
+		textAlign: "right",
+		minWidth: "36px",
 		fontSize: "16px",
 		fontWeight: "500",
 		lineHeight: "26px",
@@ -74,12 +84,12 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 				>
 					<CardMedia
 						component="img"
-						alt={tickets.title}
+						alt={ticketItem.title}
 						height="310px"
-						image={tickets.photo}
+						image={ticketItem.photo}
 					/>
 				</Box>
-				{/* 主揪資訊 */}
+
 				<Grid
 					sx={{
 						position: "absolute",
@@ -92,60 +102,29 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 					justifyContent="space-around"
 					alignItems="flex-end"
 				>
-					{/* 主揪 */}
+					{/* 分票狀態 */}
+					<Grid item>
+						<Chip sx={ChipStyle} label={ticketCountInfo()} />
+					</Grid>
+
+					{/* 參加人數 */}
 					<Grid item>
 						<Chip
 							sx={ChipStyle}
-							className="chipAvatarSmall"
-							avatar={<Avatar alt={tickets.name} src={tickets.avatar} />}
 							label={
-								<Box
-									sx={{
-										width: type === "lg" ? "75px" : "103px",
-									}}
-								>
-									{/* 星星評分 */}
-									<RatingStars rating={tickets.rating} />
-									{/* 主揪名稱 */}
-									<Typography
-										sx={{
-											...infoIconTextStyle,
-											overflow: "hidden",
-											maxWidth: "7.5em",
-											textOverflow: "ellipsis",
-											whiteSpace: "nowrap",
-											fontSize: "14px",
-											fontWeight: "400",
-											lineHeight: 1,
-										}}
-									>
-										{tickets.name}
+								<Box display="inline-flex" alignItems="center">
+									<PeopleIcon sx={infoIconStyle} />
+									<Typography sx={infoIconTextStyle}>
+										{ticketItem.capacity || 0}
 									</Typography>
 								</Box>
 							}
 						/>
 					</Grid>
 
-					{/* 參加人數 */}
-					{type === "lg" && (
-						<Grid item>
-							<Chip
-								label={
-									<Box display="inline-flex" alignItems="center">
-										<PeopleIcon sx={infoIconStyle} />
-										<Typography sx={infoIconTextStyle}>
-											{tickets.capacity || 0}
-										</Typography>
-									</Box>
-								}
-								sx={ChipStyle}
-							/>
-						</Grid>
-					)}
-
 					{/* 狀態 */}
 					<Grid item>
-						<Chip label={tickets.status ? "已使用" : "已報名"} sx={ChipStyle} />
+						<Chip label={ticketItem.status ? "已使用" : "已報名"} sx={ChipStyle} />
 					</Grid>
 				</Grid>
 			</Box>
@@ -162,7 +141,7 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 					}}
 				>
 					<LocationIcon sx={{ marginRight: "12px" }} color="action" />
-					<span>{tickets.location}</span>
+					<span>{ticketItem.location}</span>
 				</Box>
 				<Box
 					sx={{
@@ -180,7 +159,7 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 						}}
 						color="action"
 					/>
-					<span>{parseDate(tickets.startTime, tickets.endTime)}</span>
+					<span>{parseDate(ticketItem.startTime, ticketItem.endTime)}</span>
 				</Box>
 				<Typography
 					variant="h6"
@@ -190,7 +169,7 @@ function CardTicket({ tickets, type = "sm" }: CardTicketProps) {
 						lineHeight: "30px",
 					}}
 				>
-					{tickets.title}
+					{ticketItem.title}
 				</Typography>
 			</Box>
 		</Paper>
