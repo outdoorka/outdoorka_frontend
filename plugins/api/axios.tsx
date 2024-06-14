@@ -4,6 +4,7 @@ import ticket from "@/api/ticket";
 import user from "@/api/user";
 import auth from "@/api/auth";
 import organizerApi from "@/api/organizer";
+import organizerTicket from "@/api/organizerTicket";
 
 const api = {
 	activity: activities(instance, "/api/v1/activity"),
@@ -11,6 +12,7 @@ const api = {
 	user: user(instance, "/api/v1/users"),
 	auth: auth(instance, "/api/v1"),
 	organizer: organizerApi(ogInstance, "/api/v1/organizer"),
+	organizerTicket: organizerTicket(ogInstance, "/api/v1/tickets"),
 	// activities: activities(instance, "/posts")
 };
 

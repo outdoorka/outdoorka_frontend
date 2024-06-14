@@ -215,6 +215,8 @@ function CardOrganizerActivity({
 							size="small"
 							sx={{ width: "100%" }}
 							disabled={isPublish === 0}
+							component={NextLink}
+							href={`/organizer/scan/${activity._id}`}
 						>
 							驗票
 						</Button>

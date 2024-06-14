@@ -100,7 +100,7 @@ function OrganizerActivityList() {
 
 function WrappedOrganizerActivityPage() {
 	return (
-		<Suspense fallback={<Loading/>}>
+		<Suspense fallback={<Loading />}>
 			<OrganizerActivityList />
 		</Suspense>
 	);
