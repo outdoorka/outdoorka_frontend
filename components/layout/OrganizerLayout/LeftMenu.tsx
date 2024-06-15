@@ -15,8 +15,8 @@ import {
 import InboxIcon from "@mui/icons-material/Inbox";
 
 const linkTitles = [
-	{ title: "建立活動", link: "/organizer/activity-create" },
-	{ title: "活動列表", link: "/organizer/activity" },
+	{ title: "建立活動", link: "/organizer/activity-create/" },
+	{ title: "活動列表", link: "/organizer/activity/" },
 	{ title: "過往活動", link: "/organizer/activity?type=2" },
 	{ title: "主揪管理", link: "#" },
 ];
