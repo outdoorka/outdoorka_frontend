@@ -32,7 +32,7 @@ function CardActivity({
 					<CardMedia
 						component="img"
 						alt={activity.title}
-						height={181}
+						height={197}
 						image={activity.photo}
 					/>
 				</Box>

@@ -1,5 +1,6 @@
 "use client";
 
+import NextLink from "next/link";
 import PageLayout from "@/components/layout/MainLayout/PageLayout";
 import Loading from "@/components/ui/loading/loading";
 import CardActivity from "@/components/ui/card/CardActivity";
@@ -325,22 +326,23 @@ function Activities() {
 						{error && <div>Failed to load</div>}
 						{activityList?.map((value: any) => (
 							<Grid item xs={12} sm={6} lg={4} key={value._id}>
-								<CardActivity
-									key={value._id}
-									home={false}
-									activity={{
-										title: value.subtitle,
-										location: `${value.region} ${value.city}`,
-										startTime: value.activityStartTime,
-										endTime: value.activityEndTime,
-										photo: value.activityImageUrls[0],
-										avatar: "", // TODO: API response data 未回傳
-										name: value.organzierName,
-										rating: value.organizerRating,
-										capacity: value.bookedCapacity,
-										likers: value.likers,
-									}}
-								/>
+								<Box component={NextLink} href={`/activity/${value._id}`}>
+									<CardActivity
+										home={false}
+										activity={{
+											title: value.subtitle,
+											location: `${value.region} ${value.city}`,
+											startTime: value.activityStartTime,
+											endTime: value.activityEndTime,
+											photo: value.activityImageUrls[0],
+											avatar: "", // TODO: API response data 未回傳
+											name: value.organzierName,
+											rating: value.organizerRating,
+											capacity: value.bookedCapacity,
+											likers: value.likers,
+										}}
+									/>
+								</Box>
 							</Grid>
 						))}
 					</Grid>
