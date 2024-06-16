@@ -77,7 +77,6 @@ function CardOrganizerActivity({
 	return (
 		<Paper
 			sx={{
-				width: 366,
 				backgroundColor: theme.palette.primary.light,
 				borderRadius: "24px",
 				m: "auto",
