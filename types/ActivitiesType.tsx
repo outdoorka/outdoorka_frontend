@@ -12,6 +12,19 @@ export interface RootState {
 	ogAuth: OgAuthState;
 }
 
+export type ActivityProp = {
+	title: string;
+	location: string;
+	startTime: string;
+	endTime: string;
+	photo: string;
+	avatar: string;
+	name: string;
+	rating: number;
+	capacity: number;
+	likers: number;
+};
+
 export interface IActivityLink {
 	name: string;
 	url: string;

@@ -27,7 +27,7 @@ export interface TicketState {
 	organizer?: OrganizerState;
 }
 
-type TicketProp = {
+export type TicketProp = {
 	title: string;
 	location: string;
 	startTime: string;
@@ -38,8 +38,3 @@ type TicketProp = {
 	ticketCount: number;
 	tickets: TicketsState[];
 };
-
-export interface CardTicketProps {
-	type?: "sm" | "lg";
-	ticketItem: TicketProp;
-}

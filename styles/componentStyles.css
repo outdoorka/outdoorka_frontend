@@ -51,3 +51,12 @@
   overflow: hidden;
 	min-height: 2.75em;
 }
+
+.singleline-ellipsis {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+	height: 1em;
+	min-height: 1em;
+}

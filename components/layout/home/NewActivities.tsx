@@ -98,7 +98,8 @@ function NewActivities() {
 							activity={{
 								title: value.subtitle,
 								location: `${value.region} ${value.city}`,
-								date: value.activityEndTime,
+								startTime: value.activityStartTime,
+								endTime: value.activityEndTime,
 								photo: value.activityImageUrls[0],
 								avatar: value.organizer.photo,
 								name: value.organizer.name,

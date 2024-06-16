@@ -22,7 +22,7 @@ import { useTheme } from "@mui/material/styles";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SearchIcon from "@mui/icons-material/Search";
 import PageLayout from "@/components/layout/MainLayout/PageLayout";
-import CardTicket from "@/components/ui/shared/CardTicket";
+import CardTicket from "@/components/ui/card/CardTicket";
 import Loading from "@/components/ui/loading/loading";
 import NoData from "@/components/ui/shared/NoData";
 import SortIcon from "@/components/icon/SortIcon";
@@ -33,7 +33,7 @@ function Tickets() {
 	const [load, setLoad] = useState(true);
 	const [source, setSource] = useState<TicketState[]>([]);
 	const [displayList, setDisplayList] = useState<TicketState[]>([]);
-  const [sortValue, setSortValue] = useState('');
+	const [sortValue, setSortValue] = useState('');
 	const [ascValue, setAscValue] = useState(true);
 	const [searchValue, setSearchValue] = useState('');
 
@@ -47,14 +47,14 @@ function Tickets() {
 	};
 
 	const handleSelectChange = (event: SelectChangeEvent) => {
-    setSortValue(event.target.value as string);
-  };
+		setSortValue(event.target.value as string);
+	};
 
 	const handleSort = (event: SyntheticEvent) => {
 		event.preventDefault();
 		setAscValue(!ascValue);
 		let filterList = []
-		if(sortValue === 'activityStartTime' || sortValue === "activityEndTime"){
+		if(sortValue === "activityStartTime" || sortValue === "activityEndTime"){
 			filterList = sortTimeData(source, sortValue, ascValue)
 		}else{
 			filterList = source.sort((a:any, b:any) => {
@@ -74,7 +74,7 @@ function Tickets() {
 			});
 			setDisplayList(filterList);
 		}
-  };
+	s};
 
 	useEffect(() => {
 		async function loadData() {
@@ -107,7 +107,7 @@ function Tickets() {
 
 	return (
 		<PageLayout>
-			<Grid container spacing={5}>
+			<Grid container sx={{width:"100%",m:"auto", gap:5}}>
 				<Grid
 					sx={{
 						display: { xs: "none", lg: "block" },
@@ -249,8 +249,7 @@ function Tickets() {
 								<Grid key={value._id} xs={12} sm={6} md={4}>
 									<Box component={NextLink} href={`/ticket/${value._id}`}>
 										<CardTicket
-											type="lg"
-											ticketItem={{
+s											ticketItem={{
 												title: value.title,
 												location: `${value.region} ${value.city}`,
 												startTime: value.activityStartTime,
