@@ -77,7 +77,6 @@ function CardOrganizerActivity({
 	return (
 		<Paper
 			sx={{
-				width: 366,
 				backgroundColor: theme.palette.primary.light,
 				borderRadius: "24px",
 				m: "auto",
@@ -204,6 +203,8 @@ function CardOrganizerActivity({
 							size="small"
 							sx={{ width: "100%" }}
 							disabled={isPublish === 1}
+							component={NextLink}
+							href={`/organizer/activity-edit/${activity._id}`}
 						>
 							編輯
 						</Button>
