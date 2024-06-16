@@ -81,7 +81,7 @@ function CardActivity({ activity, type = "sm" }: CardActivityProps) {
 	return (
 		<Paper
 			sx={{
-				width: type === "lg" ? 366 : 272,
+				minWidth: type === "lg" ? 366 : 272,
 				height: type === "lg" ? 436 : 392,
 				backgroundColor: "#fff",
 				borderRadius: "24px",
