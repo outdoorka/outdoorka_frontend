@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Box, Unstable_Grid2 as Grid, Typography, Link } from "@mui/material";
+import { Box, Unstable_Grid2 as Grid, Link } from "@mui/material";
 import HomeOrganizerCarousel from "@/components/ui/carousel/homeOrganizerCarousel";
 import HotActivities from "@/components/layout/home/HotActivities";
 import NewActivities from "@/components/layout/home/NewActivities";
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
+import TitleSection from "@/components/layout/home/TitleSection";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -25,12 +26,7 @@ function Home() {
 				</Grid>
 				<Grid xs={10}>
 					<Box py={10}>
-						<Typography
-							variant="h3"
-							sx={{ color: "#00497D", fontSize: 56, textAlign: "center" }}
-						>
-							活動探索
-						</Typography>
+						<TitleSection title="活動探索" />
 						<Box
 							my={6}
 							maxWidth={1280}

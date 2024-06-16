@@ -2,7 +2,7 @@
 
 import PageLayout from "@/components/layout/MainLayout/PageLayout";
 import Loading from "@/components/ui/loading/loading";
-import CardActivity from "@/components/ui/shared/card-activity";
+import CardActivity from "@/components/ui/card/CardActivity";
 import axios from "@/plugins/api/axios";
 import { ActivityState } from "@/types";
 import {
@@ -315,7 +315,6 @@ function Activities() {
 							<Grid item xs={12} sm={6} md={4} key={value._id}>
 								<CardActivity
 									key={value._id}
-									type="lg"
 									activity={{
 										title: value.subtitle,
 										location: `${value.region} ${value.city}`,
@@ -326,7 +325,6 @@ function Activities() {
 										rating: value.organizerRating,
 										capacity: value.bookedCapacity,
 										likers: value.likers,
-										// rating: value.popularity
 									}}
 								/>
 							</Grid>
