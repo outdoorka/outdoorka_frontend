@@ -23,6 +23,7 @@ function MainLayout({ children }: MainLayoutProps) {
 					px: { sm: 0, lg: 0 },
 					py: 1.5,
 					wordWrap: "break-word",
+					backgroundColor: "#F8F9FF",
 				}}
 			>
 				{children}

@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 
 import { Box, Unstable_Grid2 as Grid, Link } from "@mui/material";
 import HomeOrganizerCarousel from "@/components/ui/carousel/homeOrganizerCarousel";
+import HomeBannerCarouselfrom from "@/components/ui/carousel/banner/homeBannerCarousel";
 import HotActivities from "@/components/layout/home/HotActivities";
 import NewActivities from "@/components/layout/home/NewActivities";
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
@@ -15,6 +17,14 @@ function Home() {
 	return (
 		<MainLayout>
 			<Grid container justifyContent="center">
+				{/* <Grid xs={12}> */}
+				{/* <HomeBannerCarouselfrom /> */}
+				{/* </Grid> */}
+				<Grid xs={12}>
+					<Box sx={{ height: "100vh", backgroundColor: "#F8F9FF" }}>
+						熱門活動
+					</Box>
+				</Grid>
 				<Grid xs={12}>
 					<Box sx={{ height: "1010px" }}></Box>
 				</Grid>
