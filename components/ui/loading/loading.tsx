@@ -7,7 +7,6 @@ function Loading() {
 	return (
 		<Box
 			sx={{
-				width: "100%",
 				textAlign: "center",
 				px: 0,
 				py: 40,

@@ -8,6 +8,7 @@ import axios from "@/plugins/api/axios";
 
 import { Grid, Box, Typography, TextField, Button, Alert } from "@mui/material";
 import BackBtn from "@/components/ui/shared/BackBtn";
+import TicketCheckinDialog from "@/components/ui/dialog/TicketCheckinDialog";
 
 export default function Scan() {
 	const params = useParams<{ ticket: string }>();
@@ -17,6 +18,7 @@ export default function Scan() {
 	const [errorMsg, setErrorMsg] = useState("");
 	const [scanResult, setScanResult] = useState(null);
 	const [resSucesee, setResSucesee] = useState(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	let isRes = false
 	useEffect(()=>{
@@ -44,10 +46,12 @@ export default function Scan() {
 				const responseBody = await organizerTicket.getTicketInfo(id);
 				if(responseBody.data && responseBody.data){
 					setResSucesee(responseBody.data)
+					setDialogOpen(true)
 					isRes = true
 				}
 			} catch (error: any) {
 				setResSucesee(null)
+				setDialogOpen(false)
 				if (error?.status == 400) {
 					setErrorMsg("輸入的票卷編號錯誤");
 				} else {
@@ -143,6 +147,11 @@ export default function Scan() {
 					{errorMsg !== "" && <Alert severity="warning">{errorMsg}</Alert>}
 				</Grid>
 			</Grid>
+			<TicketCheckinDialog
+				info={resSucesee}
+				open={dialogOpen}
+				onClose={() => setDialogOpen(false)}
+			/>
 		</Box>
 	);
 }

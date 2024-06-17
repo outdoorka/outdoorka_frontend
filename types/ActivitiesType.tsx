@@ -81,15 +81,18 @@ export interface OrganizerActivityState {
 
 export interface ActivityState {
 	_id: string;
-	organizer: OrganizerState;
 	title: string;
 	subtitle: string;
-	region: string;
-	city: string;
-	activityImageUrls: string[];
 	activityStartTime: string;
 	activityEndTime: string;
-	likers: number;
-	bookedCapacity: number;
-	popularity: number;
+	activityImageUrls: string[];
+
+	price?: number;
+
+	organizer?: OrganizerState;
+	region?: string;
+	city?: string;
+	likers?: number;
+	bookedCapacity?: number;
+	popularity?: number;
 }

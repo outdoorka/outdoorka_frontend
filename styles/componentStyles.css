@@ -49,7 +49,7 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-	min-height: 2.75em;
+	min-height: 4.5rem;
 }
 
 .singleline-ellipsis {

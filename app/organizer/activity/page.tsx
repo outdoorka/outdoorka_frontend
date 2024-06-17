@@ -9,6 +9,7 @@ import axios from "@/plugins/api/axios";
 import { OrganizerActivityState } from "@/types/ActivitiesType";
 import { Box, Tab, Tabs, Grid, Alert, IconButton } from "@mui/material";
 import Loading from "@/components/ui/loading/loading";
+import ListLoading from "@/components/ui/loading/ListLoading";
 import NoData from "@/components/ui/shared/NoData";
 import CardOrganizerActivity from "@/components/ui/card/CardOrganizerActivity";
 import SortIcon from "@/components/icon/SortIcon";
@@ -22,6 +23,7 @@ function OrganizerActivityList() {
 		[],
 	);
 	const [errorMsg, setErrorMsg] = useState("");
+	const [dataLoad, setDataLoad] = useState(true);
 	const [tagValue, setTagValue] = useState(type ? Number(type) : 1);
 	const [sortValue, setSortValue] = useState(true);
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -35,6 +37,7 @@ function OrganizerActivityList() {
 	useEffect(() => {
 		async function loadData() {
 			try {
+				setDataLoad(true)
 				const responseBody = await organizer.getActivity({
 					status: tagValue,
 					sort: sortValue ? "asc" : "desc",
@@ -49,6 +52,7 @@ function OrganizerActivityList() {
 					setErrorMsg(String(error?.message));
 				}
 			}
+			setDataLoad(false)
 		}
 		loadData();
 	}, [tagValue, sortValue]);
@@ -74,26 +78,28 @@ function OrganizerActivityList() {
 
 			{errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-			{activityList.length === 0 && <NoData target="活動" />}
-			{activityList.length > 0 && (
-				<Grid container spacing={2}>
-					<Grid item xs={11}></Grid>
-					<Grid item xs={1}>
-						<IconButton aria-label="排序" onClick={handleSort}>
-							<SortIcon />
-						</IconButton>
-					</Grid>
-					{activityList?.map((value) => (
-						<Grid item xs={12} sm={6} md={4} key={value._id}>
-							<CardOrganizerActivity
-								isFinish={tagValue === 2}
-								isPublish={tagValue}
-								activity={value}
-							/>
+			{dataLoad 
+				? <ListLoading/>
+				: activityList.length === 0 
+					? <NoData target="活動" />
+					: <Grid container spacing={2}>
+						<Grid item xs={11}></Grid>
+						<Grid item xs={1}>
+							<IconButton aria-label="排序" onClick={handleSort}>
+								<SortIcon />
+							</IconButton>
 						</Grid>
-					))}
-				</Grid>
-			)}
+						{activityList?.map((value) => (
+							<Grid item xs={12} sm={6} md={4} key={value._id}>
+								<CardOrganizerActivity
+									isFinish={tagValue === 2}
+									isPublish={tagValue}
+									activity={value}
+								/>
+							</Grid>
+						))}
+					</Grid>
+			}
 		</OrganizerLayout>
 	);
 }

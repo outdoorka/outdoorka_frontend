@@ -1,3 +1,5 @@
+import { ActivityState } from "@/types";
+
 export interface OrganizerState {
 	_id: string;
 	name: string;
@@ -37,4 +39,12 @@ export type TicketProp = {
 	status: number;
 	ticketCount: number;
 	tickets: TicketsState[];
+};
+
+export type CheckinTicketInfoProp = {
+	_id: string;
+	ticketStatus: number;
+	ticketNote: string;
+	payment: string;
+	activity: ActivityState;
 };
