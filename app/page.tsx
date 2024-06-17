@@ -23,7 +23,7 @@ function Home() {
 		<MainLayout>
 			<Grid container justifyContent="center">
 				{/* <Grid xs={12}> */}
-				<HomeBannerCarouselfrom />
+				{/* <HomeBannerCarouselfrom /> */}
 				{/* </Grid> */}
 				<Grid xs={12}>
 					<Box sx={{ height: "100vh", backgroundColor: "#F8F9FF" }}>
