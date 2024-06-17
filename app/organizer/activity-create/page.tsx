@@ -1,8 +1,11 @@
 "use client";
 import React, { ChangeEvent, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import axios from "@/plugins/api/axios";
+import DOMPurify from "dompurify";
+import he from "he";
 import OrganizerLayout from "@/components/layout/OrganizerLayout/OrganizerLayout";
 import { NUMBER_ONLY_REGEX, URL_REGEX } from "@/utils/regexHandler";
 import * as dayjs from "dayjs";
@@ -35,6 +38,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import LocalActivityIcon from "@mui/icons-material/LocalActivity";
 
 import { ICreateActivity, RootState } from "@/types";
 import { OgAuthState } from "@/types/AuthType";
@@ -42,6 +46,14 @@ import { ActivityTag, City } from "@/types/enum/activity";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+//  Editor 使用 dynamic import
+const Editor = dynamic(
+	() => {
+		return import("@/components/layout/editor/Editor");
+	},
+	{ ssr: false },
+);
 
 // Initial activity data
 const activityInitData: ICreateActivity = {
@@ -98,10 +110,13 @@ function ActivityCreate() {
 	const router = useRouter();
 	const { organizer } = axios;
 
+	const quillRef = useRef<any>(null);
+
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 	const [ogInfo, setOgInfo] = React.useState<OgAuthState>({
 		profile: null,
 		token: null,
+		error: null,
 	});
 	const [activityData, setActivityData] =
 		React.useState<ICreateActivity>(activityInitData);
@@ -125,6 +140,7 @@ function ActivityCreate() {
 			setOgInfo({
 				profile: ogAuth.profile,
 				token: null,
+				error: null,
 			});
 		}
 	}, [ogAuth]);
@@ -248,8 +264,6 @@ function ActivityCreate() {
 
 	const handleSubmit = (isPublish: boolean) => (e: any) => {
 		e.preventDefault();
-		// console.log("submit", activityData);
-
 		setIsLoading(true);
 
 		setFormValid({});
@@ -268,7 +282,7 @@ function ActivityCreate() {
 		let isValid = false;
 
 		for (const key in activityData) {
-			if (key === "activityImageUrls") {
+			if (key === "activityImageUrls" || key === "activityDetail") {
 				continue;
 			}
 
@@ -293,6 +307,23 @@ function ActivityCreate() {
 			}
 		}
 
+		if (
+			quillRef.current?.getEditor().getLength() < 5 ||
+			quillRef.current?.getEditor().getLength() > 600
+		) {
+			isValid = true;
+			setFormValid((prev) => ({
+				...prev,
+				activityDetail: "請填寫完整活動內容，最多 600 字",
+			}));
+		}
+
+		// 處理活動內容 XSS
+		const getCleanContent = DOMPurify.sanitize(
+			quillRef.current?.getEditor().root.innerHTML,
+		);
+		activityData.activityDetail = he.encode(getCleanContent);
+
 		let errorMessages = "未正確填寫內容，請確認以上欄位內容";
 		if (isValid) {
 			setSubmitResult({
@@ -314,10 +345,9 @@ function ActivityCreate() {
 					});
 
 					setTimeout(() => {
-						router.push("/organizer/activity-list");
+						router.push("/organizer/activity");
 					}, 200);
 				} else {
-					console.log("res.error", res);
 					if (res.error) {
 						try {
 							const error = JSON.parse(res.error);
@@ -351,8 +381,10 @@ function ActivityCreate() {
 	};
 
 	const renderSelectOption = (props: any, option: any, { selected }: any) => {
+		const { key, ...rest } = props;
+		console.info("key", key);
 		return (
-			<li {...props}>
+			<li key={option.value} {...rest}>
 				<Checkbox
 					icon={icon}
 					checkedIcon={checkedIcon}
@@ -363,9 +395,21 @@ function ActivityCreate() {
 			</li>
 		);
 	};
-
 	return (
 		<OrganizerLayout>
+			<Typography
+				variant="h5"
+				sx={{
+					fontSize: "2.5rem",
+					fontWeight: 500,
+					margin: "0 0 18px 0",
+					lineHeight: "1.6",
+				}}
+			>
+				<LocalActivityIcon sx={{ marginRight: "8px" }} />
+				建立活動
+			</Typography>
+
 			<FormControl>
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
@@ -631,20 +675,11 @@ function ActivityCreate() {
 						</List>
 					</Grid>
 					<Grid item xs={12}>
-						<TextField
-							required
-							name="activityDetail"
-							label="活動內容"
-							variant="outlined"
-							margin="normal"
-							multiline
-							rows={5}
-							fullWidth
+						<Editor
+							content={activityData.activityDetail}
+							refs={quillRef}
 							error={formValid.activityDetail ? true : false}
 							helperText={formValid.activityDetail}
-							InputLabelProps={{ shrink: true }}
-							onChange={handleInputChange}
-							value={activityData.activityDetail}
 						/>
 					</Grid>
 					<Grid item xs={12}>
@@ -676,7 +711,7 @@ function ActivityCreate() {
 									aria-label="add image"
 									size="large"
 									onClick={() => hiddenFileInput.current!.click()}
-									disabled={imageUrls.length >= 5}
+									disabled={imageUrls.length >= 5 || isLoading}
 								>
 									<AddCircleOutlineIcon fontSize="large" />
 								</IconButton>

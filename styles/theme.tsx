@@ -33,16 +33,16 @@ const lightTheme = createTheme({
 			dark: "#00497D",
 		},
 		background: {
-			default: "#DAE7F3",
+			default: "#f8f9ff",
 			paper: "#FFFFFF",
 		},
 	},
 	breakpoints: {
 		values: {
 			xs: 0,
-			sm: 600,
-			md: 800,
-			lg: 1280,
+			sm: 768,
+			md: 1280,
+			lg: 1600,
 			xl: 1920,
 		},
 	},

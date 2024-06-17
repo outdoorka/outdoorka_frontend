@@ -1,14 +1,20 @@
-import { ICreateActivity } from "@/types";
+import { ICreateActivity, IGetActivity } from "@/types";
 
 const organizerApi = (axios: any, event: any) => ({
 	getOrganizer() {
 		return axios.get(`${event}/profile`);
 	},
-	getActivity() {
-		return axios.get(`${event}`);
+	getActivity(params: IGetActivity) {
+		return axios.get(`${event}/activity`, { params });
+	},
+	getActivityById(id: string) {
+		return axios.get(`${event}/activity/${id}`);
 	},
 	createActivity(post: ICreateActivity) {
 		return axios.post(`${event}/activities`, post);
+	},
+	updateActivity(post: ICreateActivity, id: string) {
+		return axios.patch(`${event}/activities/${id}`, post);
 	},
 	imageUpload(formData: FormData) {
 		return axios.post(`${event}/imageUpload`, formData, {

@@ -10,6 +10,7 @@ import initializeStore from "@/features/index";
 
 import "@/styles/globals.css";
 import "@/styles/customStyles.css";
+import "@/styles/componentStyles.css";
 import { lightTheme } from "@/styles/theme";
 
 import Cookies from "js-cookie";
@@ -31,10 +32,10 @@ export default function RootLayout({
 
 	useEffect(() => {
 		const token = Cookies.get("OUTDOORKA_TOKEN");
-		if (!token) {
-			router.push("/");
-			return;
-		}
+		// if (!token) {
+		// 	router.push("/");
+		// 	return;
+		// }
 	}, [router]);
 
 	return (

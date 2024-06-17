@@ -1,22 +1,27 @@
+"use client";
+
 import React from "react";
-import {
-	Box,
-	Container,
-	// Typography
-} from "@mui/material";
+import { Box, Container } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
 import { MainLayoutProps } from "@/types/index";
 
 function MainLayout({ children }: MainLayoutProps) {
+	const theme = useTheme();
 	return (
-		<Box>
+		<Box
+			sx={{
+				backgroundColor: theme.palette.background.default,
+			}}
+		>
 			<Header />
 			<Container
 				component="main"
 				maxWidth="xl"
 				sx={{
-					paddingTop: 12,
+					px: { sm: 0, lg: 0 },
+					py: 1.5,
 					wordWrap: "break-word",
 					backgroundColor: "#F8F9FF",
 				}}

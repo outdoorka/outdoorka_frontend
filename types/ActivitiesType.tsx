@@ -12,9 +12,27 @@ export interface RootState {
 	ogAuth: OgAuthState;
 }
 
+export type ActivityProp = {
+	title: string;
+	location: string;
+	startTime: string;
+	endTime: string;
+	photo: string;
+	avatar: string;
+	name: string;
+	rating: number;
+	capacity: number;
+	likers: number;
+};
+
 export interface IActivityLink {
 	name: string;
 	url: string;
+}
+
+export interface IGetActivity {
+	status: number;
+	sort?: string;
 }
 
 export interface ICreateActivity {
@@ -43,16 +61,38 @@ export interface OrganizerState {
 	photo: string;
 	rating: number;
 }
-export interface ActivityState {
+
+export interface OrganizerActivityState {
 	_id: string;
-	organizer: OrganizerState;
+	title: string;
 	subtitle: string;
+	price: number;
+	totalCapacity: number; // 活動人數
+	bookedCapacity: number; // 參加人數
 	region: string;
 	city: string;
+	address: string;
+	location: string; // 集合地點
 	activityImageUrls: string[];
+	isPublish: boolean;
 	activityStartTime: string;
 	activityEndTime: string;
-	bookedCapacity: number;
-	likers: number;
-	popularity: number;
+}
+
+export interface ActivityState {
+	_id: string;
+	title: string;
+	subtitle: string;
+	activityStartTime: string;
+	activityEndTime: string;
+	activityImageUrls: string[];
+
+	price?: number;
+
+	organizer?: OrganizerState;
+	region?: string;
+	city?: string;
+	likers?: number;
+	bookedCapacity?: number;
+	popularity?: number;
 }

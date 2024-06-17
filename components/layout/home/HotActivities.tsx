@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import { Box, Grid, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import TitleSection from "@/components/layout/home/TitleSection";
-import CardActivity from "@/components/ui/shared/card-activity";
+import CardActivity from "@/components/ui/card/CardActivity";
 import Loading from "@/components/ui/loading/loading";
 import axios from "@/plugins/api/axios";
 import { ActivityState } from "@/types/ActivitiesType";
@@ -40,26 +40,27 @@ function HotActivities() {
 			sx={{
 				position: "relative",
 				mb: 25,
+				px: 2
 			}}
 		>
 			<TitleSection title="熱門活動" />
 
 			<Grid container spacing={2}>
 				{activityList?.map((value) => (
-					<Grid item xs={12} md={3} key={value._id}>
+					<Grid item xs={12} sm={6} md={4} lg={3} key={value._id}>
 						<CardActivity
-							type="lg"
+							home={true}
 							activity={{
 								title: value.subtitle,
 								location: `${value.region} ${value.city}`,
-								date: value.activityEndTime,
+								startTime: value.activityStartTime,
+								endTime: value.activityEndTime,
 								photo: value.activityImageUrls[0],
 								avatar: value.organizer.photo,
 								name: value.organizer.name,
 								rating: value.organizer.rating,
 								capacity: value.bookedCapacity,
-								likers: value.likers,
-								// rating: value.popularity
+								likers: value.likers
 							}}
 						/>
 					</Grid>
@@ -74,7 +75,7 @@ function HotActivities() {
 						sx={{
 							width: "236px",
 							backgroundColor: theme.palette.primary.main,
-							color: theme.palette.primary.light,
+							color: theme.palette.background.default,
 						}}
 					>
 						載入更多
