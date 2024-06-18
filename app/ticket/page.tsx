@@ -27,8 +27,8 @@ import SortIcon from "@/components/icon/SortIcon";
 import ListSearchHeader from "@/components/ui/shared/ListSearchHeader";
 
 function Tickets() {
-	const { ticket } = axios;
 	const theme = useTheme();
+	const { ticket } = axios;
 	const [load, setLoad] = useState(true);
 	const [source, setSource] = useState<TicketState[]>([]);
 	const [displayList, setDisplayList] = useState<TicketState[]>([]);
@@ -84,7 +84,7 @@ function Tickets() {
 					const parseData = responseBody.data.map((ticketItem:TicketState)=>{
 						return {
 							...ticketItem,
-							status: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime)
+							status: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime, ticketItem.tickets)
 						}
 					})
 					setSource(parseData);
@@ -222,6 +222,7 @@ function Tickets() {
 												photo: value.activityImageUrl,
 												capacity: value.bookedCapacity,
 												ticketCount: value.ticketCount,
+												ticketStatus: value.ticketStatus,
 												tickets: value.tickets,
 												status: value.status,
 											}}

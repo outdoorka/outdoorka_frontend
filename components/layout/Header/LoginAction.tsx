@@ -5,13 +5,11 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { profileName, getProfileCookieObj } from "@/utils/cookieHandler";
 import { RootState } from "@/types";
-import { logoutUser, setProfile } from "@/features/user/authSlice";
+import { logoutUser, fetchUser } from "@/features/user/authSlice";
 import {
 	Box,
 	Avatar,
-	IconButton,
 	Badge,
 	Button,
 	Typography,
@@ -27,22 +25,18 @@ import LoginDialog from "./LoginDialog";
 function LoginAction() {
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const userProfile = getProfileCookieObj(profileName);
-	const { profile } = useSelector((x: RootState) => x.auth);
-
+	const { profile: authUser } = useSelector((state: RootState) => state.auth);
 	const [isClient, setIsClient] = useState(false);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const open = Boolean(anchorEl);
 
-	// 避免重新整理後redux沒有資料
 	useEffect(() => {
 		setIsClient(true);
-		if (!profile && userProfile) {
-			dispatch(setProfile(userProfile));
+		if (!authUser) {
+			dispatch(fetchUser())
 		}
-		// TODO 部分頁面無登入必須轉到首頁
-	}, []);
+	}, [authUser, router]);
 
 	const handleProfileMenuClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -89,9 +83,9 @@ function LoginAction() {
 				marginBottom: 1
 			}}>
 				<Avatar sx={{ width: 40, height: 40, marginRight: 1 }}>
-					{profile?.name.charAt(0).toUpperCase()}
+					{authUser?.name.charAt(0).toUpperCase()}
 				</Avatar>
-				<Typography>{profile?.name}</Typography>
+				<Typography>{authUser?.name}</Typography>
 			</Box>
 			<MenuItem onClick={handleProfile}>管理帳號</MenuItem>
 			<MenuItem onClick={goToFavorites}>我的收藏</MenuItem>
@@ -103,13 +97,15 @@ function LoginAction() {
 	return (
 		<Box
 			sx={{
-				flex: { xs: "0 1 95px", md: "0 1 500px" },
+				flex: { xs: "0 1 112px", md: "0 1 500px" },
 				justifyContent: "flex-end",
 				textAlign: { md: "right" },
 			}}
 		>
-			{isClient ? (
-				!profile ? (
+			{!isClient ? (
+				<Box></Box>
+			) : (
+				!authUser ? (
 					<Box display="inline-flex">
 						<Button color="inherit" onClick={() => setDialogOpen(true)}>
 							登入 | 註冊
@@ -126,8 +122,8 @@ function LoginAction() {
 								onClick={handleProfileMenuClick}
 								className="chipAvatar"
 								avatar={
-									<Avatar alt={profile.name}>
-										{profile.name.charAt(0).toUpperCase()}
+									<Avatar alt={authUser.name}>
+										{authUser.name.charAt(0).toUpperCase()}
 									</Avatar>
 								}
 								label={
@@ -138,7 +134,7 @@ function LoginAction() {
 											pr: { xs: 0, md: 1 }
 										}}
 									>
-										CIAO! <b>{profile.name}</b>
+										CIAO! <b>{authUser.name}</b>
 									</Typography>
 								}
 								sx={{ 
@@ -191,8 +187,6 @@ function LoginAction() {
 						</ClickAwayListener>
 					</>
 				)
-			) : (
-				<Box></Box>
 			)}
 		</Box>
 	);

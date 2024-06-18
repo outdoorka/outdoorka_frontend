@@ -1,19 +1,19 @@
 "use client";
 
 import { useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Inter } from "next/font/google";
+import { usePathname } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import { userTokenStorage, getCookie } from "@/utils/cookieHandler";
+
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
-
 import initializeStore from "@/features/index";
 
 import "@/styles/globals.css";
 import "@/styles/customStyles.css";
 import "@/styles/componentStyles.css";
 import { lightTheme } from "@/styles/theme";
-
-import Cookies from "js-cookie";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +23,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const router = useRouter();
+	const pathname = usePathname()
 	const initialReduxState = {};
 
 	const store = useMemo(
@@ -31,12 +32,16 @@ export default function RootLayout({
 	);
 
 	useEffect(() => {
-		const token = Cookies.get("OUTDOORKA_TOKEN");
-		// if (!token) {
-		// 	router.push("/");
-		// 	return;
-		// }
-	}, [router]);
+		if(pathname === "/") return
+
+		const token = getCookie(userTokenStorage);
+		if(token) return
+
+		console.log(pathname);
+		if(pathname && !["/login/", "/register/"].includes(pathname)){
+			router.push("/");
+		}
+	}, [pathname]);
 
 	return (
 		<html lang="en">

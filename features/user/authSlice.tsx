@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "@/plugins/api/axios";
 import {
-	tokenName,
-	profileName,
+	userTokenStorage,
+	userProfileStorage,
 	getProfileCookieObj,
-	removeCookie,
 	setProfileCookie,
+	removeUserCookie,
 	setCookie,
 } from "@/utils/cookieHandler";
 import { AuthState, ProfileItem, LoginForm } from "@/types/AuthType";
@@ -22,17 +22,22 @@ export const loginUser = createAsyncThunk(
 const authSlice: any = createSlice({
 	name: "auth",
 	initialState: {
-		profile: getProfileCookieObj(profileName),
+		profile: null,
 		error: null,
 	} as AuthState,
 	reducers: {
 		logoutUser: (state: AuthState) => {
 			state.profile = null;
-			removeCookie(profileName);
-			removeCookie(tokenName);
+			removeUserCookie()
 		},
-		setProfile: (state : AuthState, action: PayloadAction<ProfileItem>) => {
-			state.profile = action.payload;
+		fetchUser: (state : AuthState) => {
+			if(!state.profile){
+				const userObj = getProfileCookieObj(userProfileStorage);
+				if(userObj){
+					state.profile = userObj;
+				}
+			}
+			return state
 		},
 	},
 	extraReducers: (builder: any) => {
@@ -46,17 +51,16 @@ const authSlice: any = createSlice({
 		builder.addCase(fulfilled, (state: AuthState, action: any) => {
 			if (action.payload.error) {
 				state.profile = null;
-				removeCookie(profileName);
-				removeCookie(tokenName);
+				removeUserCookie()
 			} else if (action.payload.data) {
 				const { user, token } = action.payload.data;
 				state.profile = user as ProfileItem;
-				setProfileCookie(tokenName, user, 1);
-				setCookie(tokenName, token.access_token, 1);
+				setProfileCookie(userProfileStorage, user, 1);
+				setCookie(userTokenStorage, token.access_token, 1);
 			}
 		});
 	},
 });
 
-export const { logoutUser, setProfile } = authSlice.actions;
+export const { logoutUser, fetchUser } = authSlice.actions;
 export default authSlice.reducer;

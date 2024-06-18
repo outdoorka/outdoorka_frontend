@@ -7,9 +7,8 @@ import NextLink from "next/link";
 
 import { RootState } from "@/types";
 import { LoginForm } from "@/types/AuthType";
-import { loginUser } from "@/features/user/authSlice";
+import { loginUser, fetchUser } from "@/features/user/authSlice";
 import { EMAIL_REGEX, PWD_REGEX } from "@/utils/regexHandler";
-
 import {
 	Unstable_Grid2 as Grid,
 	Box,
@@ -26,11 +25,13 @@ import {
 export default function Login() {
 	const router = useRouter();
 	const dispatch = useDispatch();
-
-	const { profile: authUser } = useSelector((x: RootState) => x.auth);
+	const { profile: authUser } = useSelector((state: RootState) => state.auth);
 	useEffect(() => {
 		if (authUser) {
+			// 已登入導轉到首頁
 			router.push("/");
+		}else{
+			dispatch(fetchUser())
 		}
 	}, [authUser, router]);
 
