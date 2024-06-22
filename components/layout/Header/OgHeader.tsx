@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { getOrganizer } from "@/features/organizer/ogAuthSlice";
-import { getCookie } from "@/utils/cookieHandler";
+import { OG_TOK0N_COOKIE, getCookie } from "@/utils/cookieHandler";
 import {
 	AppBar,
 	Avatar,
@@ -19,22 +19,17 @@ import {
 import LogoHeader1 from "@/public/images/logoHeader_1.svg";
 
 import { RootState } from "@/types";
-// import { ProfileOgItem } from "@/types/AuthType";
 
 function OgHeader() {
 	const router = useRouter();
 	const dispatch = useDispatch();
-	// Get ogAuth from redux
 	const {profile} = useSelector((state: RootState) => state.ogAuth);
-	// const [profile, setProfile] = useState<ProfileOgItem | null>(null);
-
+	
 	useEffect(() => {
-		const getOgToken = getCookie("OUTDOORKA_OG_TOKEN");
+		const getOgToken = getCookie(OG_TOK0N_COOKIE);
 		if (getOgToken) {
 			dispatch(getOrganizer() as any).then((res: any) => {
-				if (res.payload?.data) {
-					// setProfile(res.payload.data);
-				} else if (res.error.message) {
+				if (res.error?.message) {
 					router.push("/organizer/login");
 				}
 			});

@@ -4,9 +4,13 @@ import { useState, useEffect, MouseEvent, SyntheticEvent } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/types";
-import { logoutUser, fetchUser } from "@/features/user/authSlice";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "@/features/user/authSlice";
+import {
+	USER_PROFILE_COOKIE,
+	getProfileCookieObj,
+} from "@/utils/cookieHandler";
+
 import {
 	Box,
 	Avatar,
@@ -25,18 +29,21 @@ import LoginDialog from "./LoginDialog";
 function LoginAction() {
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const { profile: authUser } = useSelector((state: RootState) => state.auth);
+	const [authUser, setAuthUser] = useState(null);
 	const [isClient, setIsClient] = useState(false);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const open = Boolean(anchorEl);
 
+
 	useEffect(() => {
 		setIsClient(true);
-		if (!authUser) {
-			dispatch(fetchUser())
+		if(isClient) return
+		const userObj = getProfileCookieObj(USER_PROFILE_COOKIE);
+		if(userObj){
+			setAuthUser(userObj);
 		}
-	}, [authUser, router]);
+	}, []);
 
 	const handleProfileMenuClick = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);

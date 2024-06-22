@@ -1,10 +1,12 @@
 "use client";
 import Cookies from "js-cookie";
 
-export const userProfileStorage = "OUTDOORKA_USER";
-export const userTokenStorage = "OUTDOORKA_TOKEN";
-export const ogProfileName = "OUTDOORKA_OG_USER";
-export const ogTokenName = "OUTDOORKA_OG_TOKEN";
+export const USER_ACCOUNT_COOKIE = "OUTDOORKA_U_ACC"; // For login remember
+export const USER_T0KEN_COOKIE = "OUTDOORKA_U";
+export const USER_PROFILE_COOKIE = "OUTDOORKA_U_PROFILE";
+
+export const OG_TOK0N_COOKIE = "OUTDOORKA_OG";
+export const OG_ACCOUNT_COOKIE = "OUTDOORKA_OG_ACC"; // For login remember
 
 export const setCookie = (name: string, value: any, days: number) => {
 	Cookies.set(name, value, {
@@ -46,6 +48,14 @@ export const getProfileCookieObj = (name: string) => {
  * 刪除用戶登入Cookie
  */
 export const removeUserCookie = () => {
-	Cookies.remove(userProfileStorage);
-	Cookies.remove(userTokenStorage);
+	Cookies.remove(USER_PROFILE_COOKIE);
+	Cookies.remove(USER_T0KEN_COOKIE);
 };
+
+/**
+ * 刪除主揪登入Cookie
+ */
+export const removeOgCookie = () => {
+	Cookies.remove(OG_TOK0N_COOKIE);
+};
+
