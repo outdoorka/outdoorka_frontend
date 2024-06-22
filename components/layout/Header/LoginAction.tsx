@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/features/user/authSlice";
 import {
-	USER_PROFILE_COOKIE,
 	getProfileCookieObj,
+	getCookie,
+	OG_TOK0N_COOKIE
 } from "@/utils/cookieHandler";
 
 import {
@@ -39,7 +40,11 @@ function LoginAction() {
 	useEffect(() => {
 		setIsClient(true);
 		if(isClient) return
-		const userObj = getProfileCookieObj(USER_PROFILE_COOKIE);
+		const ogT0ken = getCookie(OG_TOK0N_COOKIE);
+		if(ogT0ken){
+			router.push("/organizer/activity-create");
+		}
+		const userObj = getProfileCookieObj();
 		if(userObj){
 			setAuthUser(userObj);
 		}

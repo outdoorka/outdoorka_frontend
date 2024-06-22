@@ -35,9 +35,9 @@ export const setProfileCookie = (name: string, value: any, days: number) => {
 /**
  * Cookie讀取登入資訊
  */
-export const getProfileCookieObj = (name: string) => {
-	const value = Cookies.get(name);
-	if(typeof value === "string" ){
+export const getProfileCookieObj = () => {
+	const value = Cookies.get(USER_PROFILE_COOKIE);
+	if(value && typeof value === "string" ){
 		return JSON.parse(value)
 	}else{
 		return null

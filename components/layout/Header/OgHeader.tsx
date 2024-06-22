@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect, MouseEvent, SyntheticEvent } from "react";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
-import { getOrganizer } from "@/features/organizer/ogAuthSlice";
+import { RootState } from "@/types";
+
+import { getOrganizer, logoutOrganizer } from "@/features/organizer/ogAuthSlice";
 import { OG_TOK0N_COOKIE, getCookie } from "@/utils/cookieHandler";
 import {
 	AppBar,
@@ -15,10 +17,11 @@ import {
 	Stack,
 	Toolbar,
 	Typography,
+	ClickAwayListener,
+	Menu,
+	MenuItem
 } from "@mui/material";
 import LogoHeader1 from "@/public/images/logoHeader_1.svg";
-
-import { RootState } from "@/types";
 
 function OgHeader() {
 	const router = useRouter();
@@ -38,6 +41,20 @@ function OgHeader() {
 		}
 	}, []);
 
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
+	const handleProfileMenuClick = (event: MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleProfileMenuClose = (event: Event | SyntheticEvent) => {
+		if (anchorEl && anchorEl.contains(event.target as HTMLElement)) return;
+		setAnchorEl(null);
+	};
+	const handleLogout = () => {
+		handleProfileMenuClose(new Event("logout"));
+		dispatch(logoutOrganizer());
+		router.push("/");
+	};
 	return (
 		<Box sx={{ display: "flex" }}>
 			<AppBar
@@ -81,8 +98,7 @@ function OgHeader() {
 										margin: "0 8px 0 0",
 										borderRadius: "5px",
 									}}
-									component={NextLink}
-									href="#"
+									onClick={handleProfileMenuClick}
 								>
 									<Typography
 										variant="h6"
@@ -94,6 +110,50 @@ function OgHeader() {
 										{profile.name}
 									</Typography>
 								</Button>
+
+								<ClickAwayListener onClickAway={handleProfileMenuClose}>
+									<Menu
+										id="account-menu"
+										anchorEl={anchorEl}
+										open={open}
+										onClose={handleProfileMenuClose}
+										transformOrigin={{ horizontal: "left", vertical: "top" }}
+										anchorOrigin={{ horizontal: "left", vertical: "top" }}
+										PaperProps={{
+											sx: {
+												width: 336,
+												px: 1,
+												borderRadius: 1,
+												backdropFilter: "invert(5%)",
+												backgroundColor: "rgba(255, 255, 255, .5)",
+											},
+										}}
+									>
+										<Box
+											sx={{
+												margin: "0 auto 32px auto",
+												borderRadius: "4px",
+												padding: 2,
+												backgroundColor: "#fff",
+											}}
+										>
+											<Box sx={{ 
+												display: "inline-flex", 
+												alignItems: "center",
+												marginBottom: 1
+											}}>
+												<Avatar 
+													alt={profile.name}
+													src={profile.photo}
+													sx={{ width: 40, height: 40, marginRight: 1 }}
+												/>
+												<Typography>{profile.name}</Typography>
+											</Box>
+											{/* <MenuItem onClick={handleProfile}>管理帳號</MenuItem> */}
+											<MenuItem onClick={handleLogout}>登出</MenuItem>
+										</Box>
+									</Menu>
+								</ClickAwayListener>
 							</Stack>
 						)}
 					</Box>

@@ -103,7 +103,7 @@ function TicketCheckinDialog(props: {
 				<Button
 					variant="contained"
 					color="tertiary"
-					onClick={()=>onClose}
+					onClick={onClose}
 				>
 					返回
 				</Button>
