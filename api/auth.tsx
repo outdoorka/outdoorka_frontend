@@ -24,6 +24,12 @@ const auth = (axios: any, event: any) => ({
 	registerOrganizer(post: RegisterOgForm) {
 		return axios.post(`${event}/organizer/register`, post);
 	},
+	forgotPassword(post: { email: string }) {
+		return axios.post(`${event}/organizer/forget`, post);
+	},
+	resetPassword(post: { password: string; token: string }) {
+		return axios.post(`${event}/organizer/forget/confirm`, post);
+	},
 });
 
 export default auth;
