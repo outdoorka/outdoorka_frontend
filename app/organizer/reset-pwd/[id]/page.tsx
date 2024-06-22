@@ -40,7 +40,7 @@ function ResetPwd({ params }: { params: { id: string } }) {
 
 		setIsPending(true);
 		auth
-			.resetPassword({ token: params.id, password: password })
+			.organizerResetPassword({ token: params.id, password: password })
 			.then(() => {
 				setResultMsg("密碼已重設，請重新登入");
 				setIsSuccess(true);

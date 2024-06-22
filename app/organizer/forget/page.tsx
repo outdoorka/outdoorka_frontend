@@ -32,7 +32,7 @@ function Forget() {
 
 		setIsPending(true);
 		auth
-			.forgotPassword({ email })
+			.organizerForgotPassword({ email })
 			.then(() => {
 				setResultMsg("已寄送重設密碼連結至您的 Email，請查收!");
 				setIsSuccess(true);
