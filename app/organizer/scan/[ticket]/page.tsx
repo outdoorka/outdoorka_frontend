@@ -33,7 +33,9 @@ export default function Scan() {
 			if(isRes) return
 			fetchTicket(result)
 		};
-		scanner.render(onScanSuccess);
+		if(scanner){
+			scanner.render(onScanSuccess);
+		}
 	},[]);
 
 	const fetchTicket = async (id: string) => {
