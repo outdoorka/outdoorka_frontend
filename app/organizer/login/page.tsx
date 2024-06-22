@@ -120,7 +120,7 @@ export default function Login() {
 
 				setTimeout(() => {
 					router.push("/organizer/activity-create");
-				}, 1000); // 1秒後跳轉
+				}, 300); // 後跳轉
 			} else if (res.error.message) {
 				setErrorMsg(res.error.message);
 			}
@@ -239,7 +239,7 @@ export default function Login() {
 									/>
 									<MuiLink
 										component={NextLink}
-										href="/forget"
+										href="/organizer/forget"
 										underline="always"
 									>
 										忘記密碼?
