@@ -84,7 +84,7 @@ function Tickets() {
 					const parseData = responseBody.data.map((ticketItem:TicketState)=>{
 						return {
 							...ticketItem,
-							status: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime, ticketItem.tickets)
+							ticketStatus: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime, ticketItem.tickets)
 						}
 					})
 					setSource(parseData);
@@ -212,7 +212,7 @@ function Tickets() {
 						>
 							{displayList?.map((value) => (
 								<Grid key={value._id} xs={12} sm={6} md={4}>
-									<Box component={NextLink} href={`/ticket/${value._id}`}>
+									<Box component={NextLink} href={`/ticket/${value.paymentId}`}>
 										<CardTicket
 											ticketItem={{
 												title: value.title,
