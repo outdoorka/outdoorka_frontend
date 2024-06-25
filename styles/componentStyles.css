@@ -60,3 +60,11 @@
 	height: 1em;
 	min-height: 1em;
 }
+
+.triplex-ellipsis {
+	display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+	min-height: 5.75rem;
+}
