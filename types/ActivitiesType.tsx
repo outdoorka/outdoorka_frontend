@@ -23,6 +23,8 @@ export type ActivityProp = {
 	rating?: number;
 	capacity?: number;
 	likers?: number;
+	isLike?: boolean;
+	_id?: string;
 };
 
 export interface IActivityLink {
