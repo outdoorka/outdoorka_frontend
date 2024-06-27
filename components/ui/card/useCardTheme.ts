@@ -11,10 +11,6 @@ export default function useCardTheme() {
 			borderRadius: "1.5rem",
 			backgroundColor: theme.palette.background.default,
 		},
-		topInfoWrapper: {
-			position: "relative",
-			height: 244,
-		},
 		topInfoWrapperSmall: {
 			position: "relative",
 			height: 181,

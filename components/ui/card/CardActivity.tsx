@@ -45,7 +45,10 @@ function CardActivity({
 			}}
 		>
 			{/* 上方 區塊 */}
-			<Box sx={cardStyle.topInfoWrapper}>
+			<Box sx={{
+				position: "relative",
+				height: home ? 244 : 310,
+			}}>
 				{/* 底圖 */}
 				<Box sx={cardStyle.topBg}>
 					<CardMedia
@@ -67,13 +70,17 @@ function CardActivity({
 					}}
 				>
 					{/* 主揪資訊 */}
-					<Grid item>
+					<Grid item
+						sx={{
+							flex: home? {}:{ xs: "0 1 calc(100% - 11rem)", sm: "0 1 calc(100% - 12rem)" }
+						}}
+					>
 						<Box
 							display="inline-flex"
 							alignItems="center"
 							sx={{
 								...cardStyle.chip,
-								width: home ? 158 : { xs: 230, sm: 140, md: 180, xl: 230 },
+								width: home ? { xs: 158, sm: 145, xl: 140} : "100%",
 								height: 40,
 								py: 0.5,
 							}}
@@ -92,7 +99,10 @@ function CardActivity({
 								<RatingStar rating={activity.rating || 0} />
 
 								{/* 主揪名稱 */}
-								<Typography sx={cardStyle.chipOrganizerName}>
+								<Typography sx={{
+									...cardStyle.chipOrganizerName,
+									maxWidth: home? "6rem":{ sm: "10rem" }
+								}}>
 									{activity.name}
 								</Typography>
 							</Box>

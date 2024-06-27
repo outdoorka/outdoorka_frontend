@@ -56,7 +56,7 @@ function CardActivity({ activity }: { activity: ActivityProp }) {
 							sx={{
 								...cardStyle.chip,
 								height: "2.5rem",
-								width: 155,
+								width: { xs: 155, xl: 150},
 								py: 0.5,
 							}}
 						>
