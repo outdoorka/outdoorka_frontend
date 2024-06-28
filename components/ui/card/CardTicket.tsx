@@ -26,11 +26,10 @@ function CardTicket({
 	const cardStyle = useCardTheme();
 
 	const ticketCountInfo = () => {
-		const ticketAssignCount = ticketItem.tickets.filter(item => item && item.hasOwnProperty('ticketOwnerId') && item.ticketOwnerId !== "" )
-		if(ticketAssignCount.length === ticketItem.ticketCount){
+		if(ticketItem.ticketUse === ticketItem.ticketTotal){
 			return "分票完畢"
 		}else{
-			return `待分票 ${ticketAssignCount.length}/${ticketItem.ticketCount}`
+			return `待分票 ${ticketItem.ticketUse}/${ticketItem.ticketTotal}`
 		}
 	}
 

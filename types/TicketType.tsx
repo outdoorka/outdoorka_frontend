@@ -23,7 +23,8 @@ export interface TicketState {
 	activityStartTime: string;
 	activityEndTime: string;
 	likers: number;
-	ticketCount: number;
+	ticketTotal: number;
+	ticketUse: number;
 	tickets: TicketsState[];
 	bookedCapacity: number;
 	totalCapacity?: number;
@@ -39,7 +40,8 @@ export type TicketProp = {
 	photo: string;
 	capacity: number;
 	status: number;
-	ticketCount: number;
+	ticketTotal: number;
+	ticketUse: number;
 	tickets: TicketsState[];
 	ticketStatus?: number;
 };
