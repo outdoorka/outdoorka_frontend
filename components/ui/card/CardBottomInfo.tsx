@@ -16,9 +16,10 @@ function CardBottomInfo({
 }: {
 	row: number;
 	info: {
-		location: string;
-		startTime: string;
-		endTime: string;
+		region: string;
+		city: string;
+		activityStartTime: string;
+		activityEndTime: string;
 		title: string;
 	};
 }) {
@@ -27,14 +28,14 @@ function CardBottomInfo({
 		<Box sx={{ py: 3, px: 4 }}>
 			<Box sx={cardStyle.infoRow}>
 				<LocationIcon sx={{ mr: 1.5 }} />
-				<span className="singleline-ellipsis">{info.location}</span>
+				<span className="singleline-ellipsis">{info.region} {info.city}</span>
 			</Box>
 			<Box sx={cardStyle.infoRow}>
 				<CalendarTodayIcon sx={{ mr: 1.5 }} />
 				<span className="singleline-ellipsis">
 					{row === 3
-						? parseStartTime(info.startTime)
-						: parseDate(info.startTime, info.endTime)}
+						? parseStartTime(info.activityStartTime)
+						: parseDate(info.activityStartTime, info.activityEndTime)}
 				</span>
 			</Box>
 			<Typography

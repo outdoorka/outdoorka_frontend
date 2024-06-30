@@ -2,7 +2,7 @@
 
 import { useState, useEffect, SyntheticEvent } from "react";
 import NextLink from "next/link";
-import { TicketState } from "@/types/TicketType";
+import { PaymentState } from "@/types/TicketType";
 import axios from "@/plugins/api/axios";
 import { parstTicketStatus, sortTimeData } from "@/utils/dateHandler";
 
@@ -30,8 +30,8 @@ function Tickets() {
 	const theme = useTheme();
 	const { ticket } = axios;
 	const [load, setLoad] = useState(true);
-	const [source, setSource] = useState<TicketState[]>([]);
-	const [displayList, setDisplayList] = useState<TicketState[]>([]);
+	const [source, setSource] = useState<PaymentState[]>([]);
+	const [displayList, setDisplayList] = useState<PaymentState[]>([]);
 	const [sortValue, setSortValue] = useState("");
 	const [ascValue, setAscValue] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
@@ -40,7 +40,7 @@ function Tickets() {
 		if (type === null) {
 			setDisplayList(source);
 		} else {			
-			const filterList = source.filter((ticketItem:TicketState) => ticketItem.ticketStatus === type);
+			const filterList = source.filter((ticketItem:PaymentState) => ticketItem.ticketStatus === type);
 			setDisplayList(filterList);
 		}
 	};
@@ -68,7 +68,7 @@ function Tickets() {
 		if(searchInput === ""){
 			setDisplayList(source);
 		}else{
-			const filterList = source.filter((ticketItem:TicketState) => {
+			const filterList = source.filter((ticketItem:PaymentState) => {
 				return ticketItem.title.includes(searchInput)
 			});
 			setDisplayList(filterList);
@@ -80,8 +80,9 @@ function Tickets() {
 			setLoad(true);
 			try {
 				const responseBody = await ticket.getTicketList();
+				setLoad(false);
 				if (responseBody && responseBody.data) {
-					const parseData = responseBody.data.map((ticketItem:TicketState)=>{
+					const parseData = responseBody.data.map((ticketItem:PaymentState)=>{
 						return {
 							...ticketItem,
 							ticketStatus: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime, ticketItem.tickets)
@@ -91,13 +92,13 @@ function Tickets() {
 					setDisplayList(parseData)
 				}
 			} catch (error: any) {
+				setLoad(false);
 				if (error?.status == 404) {
 					setSource([]);
 				} else {
 					console.error(String(error?.message));
 				}
 			}
-			setLoad(false);
 		}
 		loadData();
 	}, []);
@@ -211,24 +212,10 @@ function Tickets() {
 							columnSpacing={{ xs: 0, sm: 1, md: 5 }}
 							justifyContent="flex-start"
 						>
-							{displayList?.map((value) => (
-								<Grid key={value._id} xs={12} sm={6} md={4}>
+							{displayList?.map((value:PaymentState) => (
+								<Grid key={value.paymentId} xs={12} sm={6} md={4}>
 									<Box component={NextLink} href={`/ticket/${value.paymentId}`}>
-										<CardTicket
-											ticketItem={{
-												title: value.title,
-												location: `${value.region} ${value.city}`,
-												startTime: value.activityStartTime,
-												endTime: value.activityEndTime,
-												photo: value.activityImageUrl,
-												capacity: value.bookedCapacity,
-												ticketUse: value.ticketUse,
-												ticketTotal: value.ticketTotal,
-												ticketStatus: value.ticketStatus,
-												tickets: value.tickets,
-												status: value.status,
-											}}
-										/>
+										<CardTicket ticketItem={value}/>
 									</Box>
 								</Grid>
 							))}

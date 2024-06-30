@@ -12,6 +12,19 @@ export interface RootState {
 	ogAuth: OgAuthState;
 }
 
+export interface Activity {
+	title: string;
+	subtitle?: string;
+	region: string;
+	city: string;
+	price?: number;
+	activityImageUrl: string;
+	activityStartTime: string;
+	activityEndTime: string;
+	activityExpired?: boolean;
+	bookedCapacity?: number; // 參加人數
+}
+
 export type ActivityProp = {
 	title: string;
 	location: string;
@@ -62,37 +75,19 @@ export interface OrganizerState {
 	rating: number;
 }
 
-export interface OrganizerActivityState {
+export interface OrganizerActivityState extends Activity {
 	_id: string;
-	title: string;
-	subtitle: string;
-	price: number;
 	totalCapacity: number; // 活動人數
-	bookedCapacity: number; // 參加人數
-	region: string;
-	city: string;
 	address: string;
 	location: string; // 集合地點
 	activityImageUrls: string[];
 	isPublish: boolean;
-	activityStartTime: string;
-	activityEndTime: string;
 }
 
-export interface ActivityState {
+export interface ActivityState extends Activity {
 	_id: string;
-	title: string;
-	subtitle: string;
-	activityStartTime: string;
-	activityEndTime: string;
 	activityImageUrls: string[];
-
-	price?: number;
-
 	organizer?: OrganizerState;
-	region?: string;
-	city?: string;
 	likers?: number;
-	bookedCapacity?: number;
 	popularity?: number;
 }

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import PeopleIcon from "@/components/icon/peopleIcon";
-import { TicketProp } from "@/types/TicketType";
+import { PaymentState } from "@/types/TicketType";
 import CardBottomInfo from "@/components/ui/card/CardBottomInfo";
 import useCardTheme from "@/components/ui/card/useCardTheme";
 
@@ -21,16 +21,21 @@ import useCardTheme from "@/components/ui/card/useCardTheme";
 function CardTicket({ 
 	ticketItem, 
 }: {
-	ticketItem: TicketProp;
+	ticketItem: PaymentState;
 }) {
 	const cardStyle = useCardTheme();
 
 	const ticketCountInfo = () => {
-		if(ticketItem.ticketUse === ticketItem.ticketTotal){
+		if(ticketItem.ticketAssign === ticketItem.ticketTotal){
 			return "分票完畢"
 		}else{
-			return `待分票 ${ticketItem.ticketUse}/${ticketItem.ticketTotal}`
+			return `待分票 ${ticketItem.ticketAssign}/${ticketItem.ticketTotal}`
 		}
+	}
+
+	const ticketStatus = () => {
+		if(ticketItem.activityExpired) return "已逾期"
+		return ticketItem.status? "已使用" : "已報名"
 	}
 
 	return (
@@ -43,7 +48,7 @@ function CardTicket({
 						component="img"
 						height="244"
 						alt={ticketItem.title}
-						image={ticketItem.photo}
+						image={ticketItem.activityImageUrl}
 					/>
 				</Box>
 
@@ -67,7 +72,7 @@ function CardTicket({
 								<Box display="inline-flex" alignItems="center">
 									<PeopleIcon sx={cardStyle.chipIcon} />
 									<Typography sx={cardStyle.chipText}>
-										{ticketItem.capacity || 0}
+										{ticketItem.bookedCapacity || 0}
 									</Typography>
 								</Box>
 							}
@@ -78,7 +83,7 @@ function CardTicket({
 					<Grid item>
 						<Chip 
 							sx={cardStyle.chip} 
-							label={ticketItem.status ? "已使用" : "已報名"}
+							label={ticketStatus()}
 						/>
 					</Grid>
 
