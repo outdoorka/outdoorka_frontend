@@ -30,8 +30,8 @@ function Favorites() {
 	const { favorite } = axios;
 	const theme = useTheme();
 	const [load, setLoad] = useState(true);
-	const [source, setSource] = useState<ActivityState[]>([]);
-	const [displayList, setDisplayList] = useState<ActivityState[]>([]);
+	const [source, setSource] = useState([]);
+	const [displayList, setDisplayList] = useState([]);
 	const [sortValue, setSortValue] = useState("");
 	const [ascValue, setAscValue] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
@@ -39,13 +39,28 @@ function Favorites() {
 	const [displayActivityTags, setDisplayActivityTags] = useState<[]>([]);
 	const [displayRegion, setDisplayRegion] = useState<[]>([]);
 
-	const updateDisplayStatus = (type: number | null = null) => {
-	// 	if (type === null) {
-	// 		setDisplayList(source);
-	// 	} else {
-	// 		const filterList = source.filter((favoriteItem:ActivityState) => favoriteItem.status === type);
-	// 		setDisplayList(filterList);
-	// 	}
+	const clear = () => {
+		setDisplayList(source);
+	};
+	const updateDisplayTag = (tag: string = "") => {
+		if (tag) {
+			// TODO API需要tag資料
+			// const filterList = source.filter((ticketItem:any) => ticketItem.region === tag);
+			// setDisplayList(filterList);
+		} else {
+			setDisplayList(source);
+		}
+	};
+
+	const updateDisplayRegion = (region: string = "") => {
+		if (region) {
+			const filterList = source.filter(
+				(ticketItem: any) => ticketItem.region === region,
+			);
+			setDisplayList(filterList);
+		} else {
+			setDisplayList(source);
+		}
 	};
 
 	const handleSelectChange = (event: SelectChangeEvent) => {
@@ -74,7 +89,9 @@ function Favorites() {
 			setDisplayList(source);
 		} else {
 			const filterList = source.filter((favoriteItem: ActivityState) => {
-				return favoriteItem.subtitle.includes(searchInput);
+				return (
+					favoriteItem.subtitle && favoriteItem.subtitle.includes(searchInput)
+				);
 			});
 			setDisplayList(filterList);
 		}
@@ -115,9 +132,9 @@ function Favorites() {
 		loadData();
 	}, []);
 
-	const reload = (res:boolean) => {
-		if(res) loadData();
-	}
+	const reload = (res: boolean) => {
+		if (res) loadData();
+	};
 	// TODO loading要有動畫不然會閃一下
 	// if (load) return <Loading />;
 
@@ -148,7 +165,7 @@ function Favorites() {
 							variant="contained"
 							color="tertiary"
 							size="small"
-							onClick={() => updateDisplayStatus()}
+							onClick={() => clear()}
 						>
 							<DeleteOutlineIcon />
 							<span>清除篩選</span>
@@ -172,30 +189,16 @@ function Favorites() {
 							類別標籤
 						</Typography>
 
-						{displayActivityTags?.map((value, index) => (
+						{displayActivityTags?.map((value: string, index: number) => (
 							<Button
 								key={index}
 								variant="outlined"
 								size="small"
-								onClick={() => updateDisplayStatus(1)}
+								onClick={() => updateDisplayTag(value)}
 							>
 								{value}
 							</Button>
 						))}
-						{/* <Button
-							variant="outlined"
-							size="small"
-							onClick={() => updateDisplayStatus(1)}
-						>
-							已報名
-						</Button>
-						<Button
-							variant="outlined"
-							size="small"
-							onClick={() => updateDisplayStatus(0)}
-						>
-							已使用
-						</Button> */}
 					</Paper>
 
 					<Paper
@@ -216,12 +219,12 @@ function Favorites() {
 							地區
 						</Typography>
 
-						{displayRegion?.map((value, index) => (
+						{displayRegion?.map((value: string, index: number) => (
 							<Button
 								key={index}
 								variant="outlined"
 								size="small"
-								onClick={() => updateDisplayStatus(1)}
+								onClick={() => updateDisplayRegion(value)}
 							>
 								{value}
 							</Button>
@@ -268,7 +271,7 @@ function Favorites() {
 							columnSpacing={{ xs: 0, sm: 1, md: 5 }}
 							justifyContent="flex-start"
 						>
-							{displayList.map((value:ActivityState) => (
+							{displayList.map((value: ActivityState) => (
 								<Grid key={value._id} xs={12} sm={6} md={4}>
 									<CardActivity
 										home={false}
