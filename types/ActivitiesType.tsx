@@ -12,21 +12,6 @@ export interface RootState {
 	ogAuth: OgAuthState;
 }
 
-export type ActivityProp = {
-	title: string;
-	location: string;
-	startTime: string;
-	endTime: string;
-	photo: string;
-	avatar?: string;
-	name?: string;
-	rating?: number;
-	capacity?: number;
-	likers?: number;
-	isLike?: boolean;
-	_id?: string;
-};
-
 export interface IActivityLink {
 	name: string;
 	url: string;
@@ -83,18 +68,21 @@ export interface OrganizerActivityState {
 
 export interface ActivityState {
 	_id: string;
-	title: string;
+	title?: string;
 	subtitle: string;
-	activityStartTime: string;
-	activityEndTime: string;
-	activityImageUrls: string[];
 
-	price?: number;
-
-	organizer?: OrganizerState;
 	region?: string;
 	city?: string;
 	likers?: number;
 	bookedCapacity?: number;
 	popularity?: number;
+
+	activityStartTime: string;
+	activityEndTime: string;
+	activityImageUrls: string[];
+	price?: number;
+
+	organizer?: OrganizerState;
+
+	isLike?: boolean;
 }

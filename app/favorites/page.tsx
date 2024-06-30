@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect, SyntheticEvent } from "react";
-import NextLink from "next/link";
-import { TicketState } from "@/types/TicketType";
 import axios from "@/plugins/api/axios";
-import { parstTicketStatus, sortTimeData } from "@/utils/dateHandler";
+import { sortTimeData } from "@/utils/dateHandler";
 
 import {
 	Box,
@@ -41,14 +39,14 @@ function Favorites() {
 	const [displayActivityTags, setDisplayActivityTags] = useState<[]>([]);
 	const [displayRegion, setDisplayRegion] = useState<[]>([]);
 
-	// const updateDisplayStatus = (type: number | null = null) => {
+	const updateDisplayStatus = (type: number | null = null) => {
 	// 	if (type === null) {
 	// 		setDisplayList(source);
 	// 	} else {
 	// 		const filterList = source.filter((favoriteItem:ActivityState) => favoriteItem.status === type);
 	// 		setDisplayList(filterList);
 	// 	}
-	// };
+	};
 
 	const handleSelectChange = (event: SelectChangeEvent) => {
 		setSortValue(event.target.value as string);
@@ -82,42 +80,46 @@ function Favorites() {
 		}
 	};
 
-	useEffect(() => {
-		async function loadData() {
-			setLoad(true);
-			try {
-				const responseBody = await favorite.getFavoritesList();
-				if (responseBody && responseBody.data) {
-					const parseData = responseBody.data.likedList.map(
-						(favoriteItem: ActivityState) => {
-							return {
-								...favoriteItem,
-								isLike: true,
-							};
-						},
-					);
-					setSource(parseData);
-					setDisplayList(parseData);
+	async function loadData() {
+		setLoad(true);
+		try {
+			const responseBody = await favorite.getFavoritesList();
+			if (responseBody && responseBody.data) {
+				const parseData = responseBody.data.likedList.map(
+					(favoriteItem: ActivityState) => {
+						return {
+							...favoriteItem,
+							isLike: true,
+						};
+					},
+				);
+				setSource(parseData);
+				setDisplayList(parseData);
 
-					const parseActivityTags = responseBody.data.activityTags;
-					setDisplayActivityTags(parseActivityTags);
+				const parseActivityTags = responseBody.data.activityTags;
+				setDisplayActivityTags(parseActivityTags);
 
-					const parseRegion = responseBody.data.region;
-					setDisplayRegion(parseRegion);
-				}
-			} catch (error: any) {
-				if (error?.status == 404) {
-					setSource([]);
-				} else {
-					console.error(String(error?.message));
-				}
+				const parseRegion = responseBody.data.region;
+				setDisplayRegion(parseRegion);
 			}
-			setLoad(false);
+		} catch (error: any) {
+			if (error?.status == 404) {
+				setSource([]);
+			} else {
+				console.error(String(error?.message));
+			}
 		}
+		setLoad(false);
+	}
+	useEffect(() => {
 		loadData();
 	}, []);
 
-	if (load) return <Loading />;
+	const reload = (res:boolean) => {
+		if(res) loadData();
+	}
+	// TODO loading要有動畫不然會閃一下
+	// if (load) return <Loading />;
 
 	return (
 		<PageLayout>
@@ -266,27 +268,16 @@ function Favorites() {
 							columnSpacing={{ xs: 0, sm: 1, md: 5 }}
 							justifyContent="flex-start"
 						>
-							{displayList?.map((value) => (
+							{displayList.map((value:ActivityState) => (
 								<Grid key={value._id} xs={12} sm={6} md={4}>
-									<Box component={NextLink} href={`/activity/${value._id}`}>
-										<CardActivity
-											home={false}
-											activity={{
-												title: value.subtitle,
-												location: `${value.region} ${value.city}`,
-												startTime: value.activityStartTime,
-												endTime: value.activityEndTime,
-												photo: value.activityImageUrls[0],
-												avatar: value.organizer?.photo,
-												name: value.organizer?.name,
-												rating: value.organizer?.rating,
-												capacity: value.bookedCapacity,
-												likers: value.likers,
-												isLike: value.isLike,
-												_id: value._id,
-											}}
-										/>
-									</Box>
+									<CardActivity
+										home={false}
+										activity={{
+											...value,
+											isLike: value.isLike,
+										}}
+										onLoad={reload}
+									/>
 								</Grid>
 							))}
 						</Grid>
