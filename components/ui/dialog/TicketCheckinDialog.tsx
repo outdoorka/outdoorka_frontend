@@ -61,7 +61,7 @@ function TicketCheckinDialog(props: {
 			{info?.activity && (
 				<DialogContent>
 					<Box sx={{ px: 5, py: 3}}>
-						<Typography variant="h3" sx={customStyle.h3Style}>
+						<Typography variant="h3" sx={customStyle.h3TitleStyle}>
 							{info.activity.subtitle}
 						</Typography>
 						<Typography variant="h2" sx={customStyle.h2Style}>

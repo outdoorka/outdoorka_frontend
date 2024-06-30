@@ -2,7 +2,6 @@
 
 import { useState, useEffect, SyntheticEvent } from "react";
 import NextLink from "next/link";
-import { TicketState } from "@/types/TicketType";
 import axios from "@/plugins/api/axios";
 import { parstTicketStatus, sortTimeData } from "@/utils/dateHandler";
 
@@ -30,8 +29,8 @@ function Favorites() {
 	const { ticket } = axios;
 	const theme = useTheme();
 	const [load, setLoad] = useState(true);
-	const [source, setSource] = useState<TicketState[]>([]);
-	const [displayList, setDisplayList] = useState<TicketState[]>([]);
+	const [source, setSource] = useState([]);
+	const [displayList, setDisplayList] = useState([]);
 	const [sortValue, setSortValue] = useState("");
 	const [ascValue, setAscValue] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
@@ -40,7 +39,7 @@ function Favorites() {
 		if (type === null) {
 			setDisplayList(source);
 		} else {
-			const filterList = source.filter((ticketItem:TicketState) => ticketItem.status === type);
+			const filterList = source.filter((ticketItem:any) => ticketItem.status === type);
 			setDisplayList(filterList);
 		}
 	};
@@ -68,7 +67,7 @@ function Favorites() {
 		if(searchInput === ""){
 			setDisplayList(source);
 		}else{
-			const filterList = source.filter((ticketItem:TicketState) => {
+			const filterList = source.filter((ticketItem:any) => {
 				return ticketItem.title.includes(searchInput)
 			});
 			setDisplayList(filterList);
@@ -81,7 +80,7 @@ function Favorites() {
 			try {
 				const responseBody = await ticket.getTicketList();
 				if (responseBody && responseBody.data) {
-					const parseData = responseBody.data.map((ticketItem:TicketState)=>{
+					const parseData = responseBody.data.map((ticketItem:any)=>{
 						return {
 							...ticketItem,
 							status: parstTicketStatus(ticketItem.activityStartTime, ticketItem.activityEndTime, ticketItem.tickets)

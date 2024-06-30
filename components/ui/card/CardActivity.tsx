@@ -80,7 +80,7 @@ function CardActivity({
 							alignItems="center"
 							sx={{
 								...cardStyle.chip,
-								width: home ? { xs: 158, sm: 145, xl: 140} : "100%",
+								width: home ? { xs: 158, sm: 144, xl: 140} : "100%",
 								height: 40,
 								py: 0.5,
 							}}
