@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LocationIcon from "@/components/icon/locationIcon";
 import useCardTheme from "./useCardTheme";
+import { ActivityState } from "@/types/ActivitiesType";
 
 /**
  * 卡片:標題地點時間資訊
@@ -15,13 +16,7 @@ function CardBottomInfo({
 	info,
 }: {
 	row: number;
-	info: {
-		region: string;
-		city: string;
-		activityStartTime: string;
-		activityEndTime: string;
-		title: string;
-	};
+	info: ActivityState;
 }) {
 	const cardStyle = useCardTheme();
 	return (
@@ -43,7 +38,7 @@ function CardBottomInfo({
 				sx={cardStyle.infoTitle}
 				className={row === 3 ? "triplex-ellipsis" : "multiline-ellipsis"}
 			>
-				{info.title}
+				{info.subtitle}
 			</Typography>
 		</Box>
 	);

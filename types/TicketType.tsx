@@ -1,8 +1,8 @@
 import { Activity, ActivityState } from "@/types";
 
 export enum TicketStatus {
-  Unused = 0,
-  Used = 1
+	Unused = 0,
+	Used = 1,
 }
 export interface OrganizerState {
 	_id: string;
@@ -43,4 +43,4 @@ export interface TicketInfoState extends Activity {
 	ticketTotal: number;
 	ticketInspect: TicketsState[];
 	tickets: TicketsState[];
-};
+}
