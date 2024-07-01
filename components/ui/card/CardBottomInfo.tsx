@@ -36,9 +36,13 @@ function CardBottomInfo({
 			<Typography
 				variant="h6"
 				sx={cardStyle.infoTitle}
-				className={row === 3 ? "triplex-ellipsis" : "multiline-ellipsis"}
+				className={
+					row === 3 ? "triplex-ellipsis" : 
+					row === 2 ? "multiline-ellipsis" :
+					""
+				}
 			>
-				{info.subtitle}
+				{info.subtitle || info.title}
 			</Typography>
 		</Box>
 	);

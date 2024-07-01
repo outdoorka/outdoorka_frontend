@@ -104,14 +104,22 @@ function CardActivity(props: {
 							/>
 							<Box>
 								{/* 星星評分 */}
-								<RatingStar rating={activity.organizer?.rating || 0} />
+								{home?
+									<RatingStar rating={activity.organizer?.rating || 0} />
+								:
+									<RatingStar rating={activity.organizerRating || 0} />
+								}
 
 								{/* 主揪名稱 */}
 								<Typography sx={{
 									...cardStyle.chipOrganizerName,
 									maxWidth: home? "6rem":{ sm: "10rem" }
 								}}>
-									{activity.organizer?.name}
+									{home?
+										activity.organizer?.name
+									:
+										activity.organzierName
+									}
 								</Typography>
 							</Box>
 						</Box>
