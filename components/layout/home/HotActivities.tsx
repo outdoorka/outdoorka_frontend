@@ -52,7 +52,7 @@ function HotActivities() {
 			{ error || activityList.length === 0
 				? <HotActivitiesLoading/>
 				: <>
-					<Grid container spacing={2}>
+					<Grid container rowSpacing={2} columnSpacing={{ xs: 0, sm: 2}}>
 						{activityList &&
 							activityList.map((value: HomeActivityState) => (
 								<Grid item xs={12} sm={6} md={4} lg={3} key={value._id}>

@@ -190,14 +190,14 @@ function LoginAction() {
 			sx={{
 				flex: { xs: "0 1 112px", md: "0 1 500px" },
 				justifyContent: "flex-end",
-				textAlign: { md: "right" },
+				textAlign: { md: "right" }
 			}}
 		>
 			{!isClient ? (
 				<Box></Box>
 			) : authUser ? (
 				<>
-					<Box display="inline-flex">
+					<Box display="inline-flex" sx={{flexDirection:{ xs:"row-reverse",sm:"row"}}}>
 						<Chip
 							onClick={handleProfileMenuClick}
 							className={`chipAvatar ${isOg?"og":""}`}
@@ -257,12 +257,6 @@ function LoginAction() {
 							PaperProps={{
 								sx: {
 									width: 336,
-									px: 2,
-									pt: 1,
-									pb: 4,
-									borderRadius: 0.75,
-									backdropFilter: "invert(5%)",
-									backgroundColor: "rgba(255, 255, 255, .5)",
 								},
 							}}
 						>

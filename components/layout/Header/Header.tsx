@@ -19,7 +19,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoHeader1 from "@/public/images/logoHeader_1.svg";
 import LogoHeader2 from "@/public/images/logoHeader_2.svg";
 import LoginAction from "./LoginAction";
-export const drawerWidth = 240;
+export const drawerPaperStyle = {
+	boxSizing: "border-box",
+	width: 280,
+	height: 587,
+	mt: 2,
+	ml: 2
+};
+
 export const linkTitles = [
 	{ title: "關於我們", link: "#" },
 	{ title: "活動", link: "/activities" },
@@ -169,10 +176,7 @@ function Header() {
 					}}
 					sx={{
 						display: { xs: "block", md: "none" },
-						"& .MuiDrawer-paper": {
-							boxSizing: "border-box",
-							width: drawerWidth,
-						},
+						"& .MuiDrawer-paper": drawerPaperStyle,
 					}}
 				>
 					<AsideDrawer drawerToggle={handleDrawerToggle} />

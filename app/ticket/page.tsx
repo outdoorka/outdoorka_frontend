@@ -35,8 +35,10 @@ function Tickets() {
 	const [sortValue, setSortValue] = useState("");
 	const [ascValue, setAscValue] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
+	const [filterType, setFilterType] = useState<number | null>(null);
 
 	const updateDisplayStatus = (type: number | null = null) => {
+		setFilterType(type)
 		if (type === null) {
 			setDisplayList(source);
 		} else {
@@ -137,15 +139,18 @@ function Tickets() {
 						>
 							篩選條件
 						</Typography>
-						<Button
-							variant="contained"
-							color="tertiary"
-							size="small"
-							onClick={() => updateDisplayStatus()}
-						>
-							<DeleteOutlineIcon />
-							<span>清除篩選</span>
-						</Button>
+						{filterType !== null &&
+							<Button
+								variant="contained"
+								color="tertiary"
+								size="small"
+								sx={{ borderRadius: 4 }}
+								onClick={() => updateDisplayStatus(null)}
+							>
+								<DeleteOutlineIcon />
+								<span>清除篩選</span>
+							</Button>
+						}
 					</Box>
 					<Paper
 						variant="elevation"
@@ -167,7 +172,8 @@ function Tickets() {
 						<Button
 							variant="outlined"
 							size="small"
-							sx={{ mr: 1 }}
+							color={filterType===0?"secondary":"primary"}
+							sx={{ mr: 1, borderRadius: 6 }}
 							onClick={() => updateDisplayStatus(0)}
 						>
 							已報名
@@ -175,6 +181,8 @@ function Tickets() {
 						<Button
 							variant="outlined"
 							size="small"
+							color={filterType===1?"secondary":"primary"}
+							sx={{ borderRadius: 6 }}
 							onClick={() => updateDisplayStatus(1)}
 						>
 							已使用
@@ -201,6 +209,7 @@ function Tickets() {
 							<Select
 								defaultValue={"activityStartTime"}
 								onChange={handleSelectChange}
+								sx={{borderRadius: 8}}
 							>
 								<MenuItem value={"activityStartTime"}>活動開始日期</MenuItem>
 								<MenuItem value={"activityEndTime"}>活動結束日期</MenuItem>
