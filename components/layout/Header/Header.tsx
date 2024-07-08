@@ -28,11 +28,11 @@ export const drawerPaperStyle = {
 };
 
 export const linkTitles = [
-	{ title: "關於我們", link: "#" },
-	{ title: "活動", link: "/activities" },
-	{ title: "優良主揪", link: "#" },
-	{ title: "Blog", link: "#" },
-	{ title: "短影音", link: "#" },
+	{ title: "關於我們", link: "#", disabled: true },
+	{ title: "活動", link: "/activities", disabled: false },
+	{ title: "優良主揪", link: "#", disabled: true },
+	{ title: "Blog", link: "#", disabled: true },
+	{ title: "短影音", link: "#", disabled: true },
 ];
 
 export function AsideDrawer(props: { drawerToggle: () => void }) {
