@@ -35,13 +35,13 @@ export const linkTitles = [
 	{ title: "短影音", link: "#" },
 ];
 
-export function AsideDrawer(props: {
-	drawerToggle: () => void;
-}) {
+export function AsideDrawer(props: { drawerToggle: () => void }) {
 	const { drawerToggle } = props;
 	return (
 		<Box>
-			<IconButton onClick={drawerToggle}><MenuIcon /></IconButton>
+			<IconButton onClick={drawerToggle}>
+				<MenuIcon />
+			</IconButton>
 			<List sx={{ px: 2, py: 5 }}>
 				{linkTitles.map((item) => (
 					<ListItem
@@ -65,7 +65,7 @@ export function AsideDrawer(props: {
 				))}
 			</List>
 		</Box>
-	)
+	);
 }
 
 function Header() {
@@ -89,7 +89,7 @@ function Header() {
 				component="nav"
 				elevation={scrollDownFlag ? 6 : 0}
 				sx={{
-					backgroundColor: scrollDownFlag ? "#D9D9D9" : "transparent",
+					backgroundColor: scrollDownFlag ? "#D9D9D9" : "#FFFFFF",
 					color: "#4A4642",
 					transition: scrollDownFlag ? "0.3s" : "0.5s",
 					boxShadow: "none",
@@ -116,7 +116,6 @@ function Header() {
 					>
 						<MenuIcon />
 					</IconButton>
-
 					{/* Desktop: Menu*/}
 					<Box
 						sx={{
@@ -141,26 +140,31 @@ function Header() {
 							</Link>
 						))}
 					</Box>
-
-					<Button
-						component={NextLink}
+					<Link
 						href="/"
 						sx={{
+							display: "flex",
+							alignItems: "center",
 							height: { xs: "30px", md: "48px" },
 							flex: "1 1 auto",
 							justifyContent: "center",
+							padding: 0,
+							minWidth: 0,
 						}}
 					>
-						<Image
-							src={scrollDownFlag ? LogoHeader2 : LogoHeader1}
-							fill={true}
-							alt="揪好咖"
-							style={{
-								transition: scrollDownFlag ? "0.3s" : "0.5s",
-							}}
-							priority={true}
-						/>
-					</Button>
+						<Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+							<Image
+								src={scrollDownFlag ? LogoHeader2 : LogoHeader1}
+								layout="fill"
+								objectFit="contain"
+								alt="揪好咖"
+								style={{
+									transition: scrollDownFlag ? "0.3s" : "0.5s",
+								}}
+								priority={true}
+							/>
+						</Box>
+					</Link>
 
 					<LoginAction />
 				</Toolbar>
