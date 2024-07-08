@@ -28,7 +28,7 @@ export const drawerPaperStyle = {
 };
 
 export const linkTitles = [
-	{ title: "關於我們", link: "#", disabled: true },
+	{ title: "關於我們", link: "/about", disabled: false },
 	{ title: "活動", link: "/activities", disabled: false },
 	{ title: "優良主揪", link: "#", disabled: true },
 	{ title: "Blog", link: "#", disabled: true },
@@ -56,8 +56,9 @@ export function AsideDrawer(props: { drawerToggle: () => void }) {
 						<Link
 							key={item.title}
 							href={item.link}
-							underline="hover"
 							sx={{ fontSize: "18px" }}
+							underline={item.disabled? "none": "hover"}
+							className={item.disabled? "disabled-link": ""}
 						>
 							{item.title}
 						</Link>
@@ -127,10 +128,11 @@ function Header() {
 							<Link
 								color="inherit"
 								fontSize="inherit"
-								underline="hover"
 								noWrap
 								key={item.title}
 								href={item.link}
+								underline={item.disabled? "none": "hover"}
+								className={item.disabled? "disabled-link": ""}
 								sx={{
 									py: 1,
 									px: 3,
