@@ -130,5 +130,6 @@ Visit http://localhost:3000 in your browser to access the application.
 
 .
 
-![LOGO](https://i.imgur.com/woq9oCr.png#pic_center =300x)
+<img src="https://i.imgur.com/woq9oCr.png" width="216" height="40">
+
 © 2023 outdoorka
