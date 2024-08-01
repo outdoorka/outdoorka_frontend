@@ -1,12 +1,23 @@
-import instance from "./instance";
+import instance, { ogInstance } from "./instance";
 import activities from "@/api/activity";
+import ticket from "@/api/ticket";
 import user from "@/api/user";
+import auth from "@/api/auth";
+import organizerApi from "@/api/organizer";
+import organizerTicket from "@/api/organizerTicket";
+import paymentApi from "@/api/payment";
+import favorite from "@/api/favorite";
 
-export const URL = {
-	OUTDOORKA_URL: process.env.FRONTEND_URL || "http://localhost:3006",
+const api = {
+  activity: activities(instance, "/api/v1/activity"),
+  ticket: ticket(instance, "/api/v1/tickets"),
+  user: user(instance, "/api/v1/users"),
+  auth: auth(instance, "/api/v1"),
+  organizer: organizerApi(ogInstance, "/api/v1/organizer"),
+  organizerTicket: organizerTicket(ogInstance, "/api/v1/tickets"),
+  payments: paymentApi(instance, "/api/v1/payments"),
+  // activities: activities(instance, "/posts")
+  favorite: favorite(instance, "/api/v1/liked-list"),
 };
 
-export default {
-	activities: activities(instance, `https://jsonplaceholder.typicode.com/posts`),
-	user: user(instance, `${URL.OUTDOORKA_URL}/api/v1/users`),
-};
+export default api;
